@@ -28,7 +28,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 8
   function mat(c,m,r,e,ei){ var o={color:c,metalness:m,roughness:r}; if(e!=null){o.emissive=e;o.emissiveIntensity=ei||1;} return new T.MeshStandardMaterial(o); }
   var M={ body:mat(0x44586b,0.55,0.5), tube:mat(0x6b8a9a,0.85,0.32), solar:mat(0x081626,0.92,0.18,0x06243a,0.22),
     door:mat(0x161f2a,0.5,0.6), warm:mat(0x3a2a12,0.3,0.5,0xF5A623,1.5), cool:mat(0x103040,0.3,0.5,0x22B8D6,1.2),
-    ground:mat(0x0e1822,0.1,0.92), road:mat(0x0c121a,0.1,0.9), lane:mat(0x3a2c10,0.2,0.6,0xF5A623,0.5), pier:mat(0x0c141d,0.3,0.85) };
+    ground:mat(0x0e1822,0.1,0.92), road:mat(0x0c121a,0.1,0.9), lane:mat(0x3a2c10,0.2,0.6,0xF5A623,0.5), pier:mat(0x0c141d,0.3,0.85), pad:mat(0x1a2733,0.2,0.85) };
   function box(p,material,w,h,d,x,y,z){ var m=new T.Mesh(new T.BoxGeometry(w,h,d),material); m.position.set(x||0,y||0,z||0); m.castShadow=true; m.receiveShadow=true; p.add(m); return m; }
 
   // compact pod builder (W2 x L3 x H2.4), lit = warm(occupied)/cool(vacant)
@@ -42,6 +42,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 8
     box(grp, lit?M.warm:M.cool, 0.5,0.06,0.06, 0,1.7,L/2+0.03);
     [[-W/2+0.3,-L/2+0.3],[W/2-0.3,-L/2+0.3],[-W/2+0.3,L/2-0.3],[W/2-0.3,L/2-0.3]].forEach(function(c){
       var p=new T.Mesh(new T.CylinderGeometry(0.14,0.16,0.5,10),M.pier); p.position.set(c[0],-0.2,c[1]); p.castShadow=true; grp.add(p); });
+    var pad=new T.Mesh(new T.BoxGeometry(W+0.7,0.12,L+0.7),M.pad); pad.position.y=-0.02; pad.receiveShadow=true; grp.add(pad);
     grp.position.set(px,0,pz); grp.scale.set(0.01,0.01,0.01); grp.userData={delay:delay}; root.add(grp); return grp;
   }
 
@@ -54,6 +55,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 8
   // pods: 2 rows of 5
   var pods=[], gap=3.5, sx=-2*gap;
   for(var r=0;r<2;r++) for(var c=0;c<5;c++){ var lit=((c+r)%3!==0); pods.push(pod(sx+c*gap, r*4.0-2.0, lit, (r*5+c)*0.07)); }
+  window.__podCount=pods.length;
 
   // moon + glow + stars
   var moon=new T.Mesh(new T.SphereGeometry(4,32,32), new T.MeshBasicMaterial({color:0xeaf2f7})); moon.position.set(34,22,-46); scene.add(moon);
@@ -71,18 +73,18 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 8
 
   // camera + orbit
   var camera=new T.PerspectiveCamera(40,1,0.1,400);
-  var target=new T.Vector3(0,1.0,0), R=30, theta=1.02, phi=0.92, idle=0, dragging=false,lx=0,ly=0;
+  var target=new T.Vector3(0,0.4,0), R=27, theta=0.9, phi=0.74, idle=0, dragging=false,lx=0,ly=0;
   function place(){ camera.position.set(target.x+R*Math.sin(phi)*Math.cos(theta), target.y+R*Math.cos(phi), target.z+R*Math.sin(phi)*Math.sin(theta)); camera.lookAt(target); }
   function size(){ var w=canvas.clientWidth,h=canvas.clientHeight||1; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
   canvas.addEventListener('pointerdown',function(e){ dragging=true; lx=e.clientX; ly=e.clientY; idle=0; canvas.setPointerCapture(e.pointerId); });
-  canvas.addEventListener('pointermove',function(e){ if(!dragging)return; theta-=(e.clientX-lx)*0.005; phi=Math.max(0.5,Math.min(1.4,phi-(e.clientY-ly)*0.005)); lx=e.clientX; ly=e.clientY; idle=0; });
+  canvas.addEventListener('pointermove',function(e){ if(!dragging)return; theta-=(e.clientX-lx)*0.005; phi=Math.max(0.35,Math.min(1.3,phi-(e.clientY-ly)*0.005)); lx=e.clientX; ly=e.clientY; idle=0; });
   function up(){ dragging=false; } canvas.addEventListener('pointerup',up); canvas.addEventListener('pointerleave',up);
   canvas.addEventListener('wheel',function(e){ e.preventDefault(); R=Math.max(20,Math.min(52,R+e.deltaY*0.02)); },{passive:false});
 
   var t0=null,el=0;
   function loop(ts){ if(t0==null)t0=ts; var dt=Math.min(0.05,(ts-t0)/1000); t0=ts; el+=dt;
     for(var i=0;i<pods.length;i++){ var p=pods[i],d=p.userData.delay; if(el>d){ var k=Math.min(1,(el-d)*1.6); var s=k<1?(1-Math.pow(1-k,3)):1; p.scale.set(s,s,s); } }
-    if(!dragging){ idle+=dt; if(idle>0.6) theta+=dt*0.085; }
+    if(!dragging){ idle+=dt; if(idle>0.6) theta+=dt*0.045; }
     place(); renderer.render(scene,camera); requestAnimationFrame(loop);
   }
   canvas.addEventListener('webglcontextlost',function(e){ e.preventDefault(); document.body.classList.add('nowebgl'); },false);
