@@ -43,7 +43,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 8
     [[-W/2+0.3,-L/2+0.3],[W/2-0.3,-L/2+0.3],[-W/2+0.3,L/2-0.3],[W/2-0.3,L/2-0.3]].forEach(function(c){
       var p=new T.Mesh(new T.CylinderGeometry(0.14,0.16,0.5,10),M.pier); p.position.set(c[0],-0.2,c[1]); p.castShadow=true; grp.add(p); });
     var pad=new T.Mesh(new T.BoxGeometry(W+0.7,0.12,L+0.7),M.pad); pad.position.y=-0.02; pad.receiveShadow=true; grp.add(pad);
-    grp.position.set(px,0,pz); grp.scale.set(0.01,0.01,0.01); grp.userData={delay:delay}; root.add(grp); return grp;
+    grp.position.set(px,0,pz); grp.userData={delay:delay}; root.add(grp); return grp;
   }
 
   // ground + road + dashed lane
@@ -56,7 +56,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 8
   var pods=[], gap=3.5, sx=-2*gap;
   for(var r=0;r<2;r++) for(var c=0;c<5;c++){ var lit=((c+r)%3!==0); pods.push(pod(sx+c*gap, r*4.0-2.0, lit, (r*5+c)*0.07)); }
   window.__podCount=pods.length;
-  window.__dbg=function(){ return { cam:camera&&camera.position?[+camera.position.x.toFixed(1),+camera.position.y.toFixed(1),+camera.position.z.toFixed(1)]:null, R:R, theta:+theta.toFixed(2), phi:+phi.toFixed(2), pods:pods.map(function(p){return [+p.position.x.toFixed(1),+p.position.z.toFixed(1),+p.scale.x.toFixed(3)];}) }; };
 
   // moon + glow + stars
   var moon=new T.Mesh(new T.SphereGeometry(4,32,32), new T.MeshBasicMaterial({color:0xeaf2f7})); moon.position.set(34,22,-46); scene.add(moon);
@@ -84,7 +83,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 8
 
   var tStart=null,tPrev=null;
   function loop(ts){ if(tStart==null){tStart=ts;tPrev=ts;} var dt=Math.min(0.05,(ts-tPrev)/1000); tPrev=ts; var el=(ts-tStart)/1000;
-    for(var i=0;i<pods.length;i++){ var p=pods[i],d=p.userData.delay; var k=Math.max(0,Math.min(1,(el-d)*2.2)); var s=k<=0?0.001:(1-Math.pow(1-k,3)); p.scale.set(s,s,s); }
     if(!dragging){ idle+=dt; if(idle>0.6) theta+=dt*0.045; }
     place(); renderer.render(scene,camera); requestAnimationFrame(loop);
   }

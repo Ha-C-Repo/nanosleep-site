@@ -93,9 +93,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 9
   canvas.addEventListener('wheel',function(e){ e.preventDefault(); R=Math.max(18,Math.min(42,R+e.deltaY*0.02)); },{passive:false});
 
   // intro scale-in
-  var tStart=null,tPrev=null;
-  function loop(ts){ if(tStart==null){tStart=ts;tPrev=ts;} var dt=Math.min(0.05,(ts-tPrev)/1000); tPrev=ts; var intro=Math.min(1,(ts-tStart)/900);
-    var s=0.65+0.35*(1-Math.pow(1-intro,3)); pod.scale.set(s,s,s); pod.rotation.y=(1-intro)*0.5;
+  var tPrev=null;
+  function loop(ts){ if(tPrev==null)tPrev=ts; var dt=Math.min(0.05,(ts-tPrev)/1000); tPrev=ts;
     if(!dragging){ idle+=dt; if(idle>0.6) theta+=dt*0.18; }
     place(); renderer.render(scene,camera); requestAnimationFrame(loop);
   }
