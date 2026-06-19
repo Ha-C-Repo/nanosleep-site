@@ -117,6 +117,19 @@ section{min-height:100vh;padding:120px 0;position:relative;}
 .cluster-wrap{position:relative;}
 .cluster-tag{position:absolute;top:14px;left:14px;z-index:2;font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:rgba(255,255,255,0.4);text-transform:uppercase;pointer-events:none;}
 
+
+.lockwrap{position:relative;}
+.lock-ov{display:none;} .lock-done{display:none;}
+@media (hover:none) and (pointer:coarse){
+  .lockwrap .frame{pointer-events:none;}
+  .lockwrap.active .frame{pointer-events:auto;}
+  .lock-ov{display:flex;position:absolute;inset:0;align-items:flex-end;justify-content:center;background:transparent;border:0;cursor:pointer;padding-bottom:22px;z-index:3;}
+  .lockwrap.active .lock-ov{display:none;}
+  .lock-hint{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);background:rgba(5,13,26,.72);padding:9px 18px;border:1px solid var(--border);border-radius:2px;}
+  .lock-done{display:none;position:absolute;top:12px;right:12px;z-index:4;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);background:var(--cyan);border:0;padding:9px 16px;border-radius:2px;cursor:pointer;}
+  .lockwrap.active .lock-done{display:block;}
+}
+
 /* CONTACT */
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:48px;}
 .cinfo{max-width:440px;}
@@ -262,7 +275,7 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
     <p class="eyebrow reveal">NS-VIZ-INT-001 · Interactive 3D · Drag to Explore</p>
     <h2 class="headline reveal">STEP<br><span class="cy">INSIDE.</span></h2>
     <p class="subtext reveal">Explore every square foot of the Twin Pod interior. Drag to orbit. Scroll to zoom. Use the presets to jump to each zone.</p>
-    <iframe class="frame reveal" src="https://nanosleepinteriorrender.netlify.app/" title="NanoSleep interactive interior 3D render" loading="lazy"></iframe>
+    <div class="lockwrap reveal" id="intLock"><iframe class="frame" src="https://nanosleepinteriorrender.netlify.app/" title="NanoSleep interactive interior 3D render" loading="lazy"></iframe><button class="lock-ov" id="intOv" aria-label="Activate interior view"><span class="lock-hint">Tap to look inside</span></button><button class="lock-done" id="intDone" type="button">Done</button></div>
     <div class="callouts">
       <div class="callout"><div class="lab">Sleep Zone</div><div class="val">38" &times; 75" Platform Bed</div></div>
       <div class="callout"><div class="lab">Wet Zone</div><div class="val">32" &times; 32" Shower + Toilet</div></div>
@@ -407,6 +420,12 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   var prog=document.getElementById('prog');
   window.addEventListener('scroll',function(){ var h=document.documentElement; var sc=h.scrollTop/((h.scrollHeight-h.clientHeight)||1); prog.style.width=(sc*100)+'%'; },{passive:true});
   setTimeout(function(){ var n=document.querySelectorAll('.reveal:not(.in)'); for(var i=0;i<n.length;i++) n[i].classList.add('in'); },1400);
+  (function(){ var lw=document.getElementById('intLock'); if(!lw) return;
+    var ov=document.getElementById('intOv'), dn=document.getElementById('intDone'), sy=0;
+    function lock(){ sy=window.scrollY||window.pageYOffset; lw.classList.add('active'); var b=document.body; b.style.position='fixed'; b.style.top=(-sy)+'px'; b.style.left='0'; b.style.right='0'; b.style.width='100%'; }
+    function unlock(){ lw.classList.remove('active'); var b=document.body; b.style.position=''; b.style.top=''; b.style.left=''; b.style.right=''; b.style.width=''; window.scrollTo(0,sy); }
+    if(ov) ov.addEventListener('click',lock); if(dn) dn.addEventListener('click',unlock);
+  })();
 })();
 </script>
 </body>
