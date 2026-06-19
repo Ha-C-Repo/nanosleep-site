@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NanoSleep Twin Pod 3D</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 90% at 70% 10%,#0b1a2c 0%,#050d1a 55%,#03070f 100%);font-family:'Courier New',monospace;}
+#c{display:block;width:100%;height:100%;cursor:grab}#c:active{cursor:grabbing}
+.tag{position:fixed;top:12px;left:14px;font-size:9px;letter-spacing:.22em;color:rgba(34,184,214,.7);text-transform:uppercase;z-index:2;pointer-events:none}
+.hint{position:fixed;bottom:12px;right:14px;font-size:9px;letter-spacing:.18em;color:rgba(240,242,245,.35);text-transform:uppercase;z-index:2;pointer-events:none}
+.fallback{position:fixed;inset:0;display:none;align-items:center;justify-content:center;color:rgba(240,242,245,.5);font-size:12px;letter-spacing:.1em;text-align:center;padding:24px}
+.nowebgl #c{display:none}.nowebgl .fallback{display:flex}
+</style></head><body>
+<div class="tag">NanoSleep · Twin Pod · 8&times;12&times;9</div>
+<div class="hint">Drag to orbit</div>
+<canvas id="c" aria-label="Interactive 3D model of the NanoSleep Twin Pod"></canvas>
+<div class="fallback">3D view needs WebGL. The Twin Pod is a welded HSS steel frame, 96 SF, solar roof, off-grid.</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  if(!window.THREE){ document.body.classList.add('nowebgl'); return; }
+  var T=window.THREE, canvas=document.getElementById('c');
+  var renderer;
+  try{ renderer=new T.WebGLRenderer({canvas:canvas,alpha:true,antialias:true,powerPreference:'high-performance'}); }
+  catch(e){ document.body.classList.add('nowebgl'); return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap;
+  renderer.outputEncoding=T.sRGBEncoding;
+
+  var scene=new T.Scene(); scene.fog=new T.Fog(0x050d1a,30,80);
+  var g=new T.Group(); scene.add(g);
+
+  function mat(c,m,r,e,ei){ var o={color:c,metalness:m,roughness:r}; if(e!=null){o.emissive=e;o.emissiveIntensity=ei||1;} return new T.MeshStandardMaterial(o); }
+  var M={
+    body:mat(0x2b3a4c,0.62,0.5), skin:mat(0x223040,0.45,0.62), tube:mat(0x5a7787,0.85,0.32),
+    door:mat(0x18222e,0.5,0.6), solar:mat(0x081626,0.92,0.16,0x06243a,0.25),
+    pier:mat(0x101a24,0.4,0.8), trim:mat(0x22B8D6,0.4,0.4,0x22B8D6,0.6),
+    glowWarm:mat(0x3a2a12,0.3,0.5,0xF5A623,0.9), glowCool:mat(0x103040,0.3,0.5,0x22B8D6,0.7),
+    deck:mat(0x2a3744,0.5,0.7)
+  };
+  function box(p,material,w,h,d,x,y,z){ var m=new T.Mesh(new T.BoxGeometry(w,h,d),material); m.position.set(x||0,y||0,z||0); m.castShadow=true; m.receiveShadow=true; p.add(m); return m; }
+
+  // ---- Twin Pod: 8 W (x) x 12 L (z) x 9 H (y) ----
+  var W=8,L=12,H=9, pod=new T.Group(); g.add(pod);
+  // base deck
+  box(pod,M.deck,W,0.4,L,0,0.2,0);
+  // steel skin body (slightly inset)
+  box(pod,M.body,W-0.3,H-0.5,L-0.3,0,H/2+0.2,0);
+  // HSS tube frame: 4 verticals + top & base perimeter rails
+  var hx=(W)/2, hz=(L)/2, tw=0.32;
+  [[-hx,-hz],[hx,-hz],[-hx,hz],[hx,hz]].forEach(function(c){ box(pod,M.tube,tw,H,tw,c[0],H/2+0.2,c[1]); });
+  [0.6,H-0.2].forEach(function(yy){
+    box(pod,M.tube,W+tw,tw,tw,0,yy,-hz); box(pod,M.tube,W+tw,tw,tw,0,yy,hz);
+    box(pod,M.tube,tw,tw,L+tw,-hx,yy,0); box(pod,M.tube,tw,tw,L+tw,hx,yy,0);
+  });
+  // mid rail (the X-brace line) on long faces
+  [-hx,hx].forEach(function(xx){ box(pod,M.tube,tw*0.8,tw*0.8,L,xx,H*0.55,0); });
+  // door on front short face (+z), recessed darker panel + cyan handle + NFC pad
+  box(pod,M.door,2.6,5.4,0.18,0,2.9,hz+0.02);
+  box(pod,M.trim,0.12,1.4,0.16,0.9,2.9,hz+0.12);              // handle
+  box(pod,M.glowCool,0.5,0.5,0.16,-0.8,4.2,hz+0.12);          // NFC pad glow
+  // window on a long face (+x) - warm interior glow
+  box(pod,M.glowWarm,0.16,2.0,3.2,hx+0.02,4.6,-1.2);
+  box(pod,M.tube,0.2,2.3,3.5,hx-0.02,4.6,-1.2);               // window frame
+  // roof: two tilted solar panels
+  [-2.1,2.1].forEach(function(xx){ var s=box(pod,M.solar,3.4,0.16,L-1.4,xx,H+0.45,0); s.rotation.x=0.06; });
+  box(pod,M.tube,W+0.2,0.18,0.3,0,H+0.3,-hz+0.4);             // roof front rail
+  // 4 concrete piers under corners
+  [[-hx+0.5,-hz+0.5],[hx-0.5,-hz+0.5],[-hx+0.5,hz-0.5],[hx-0.5,hz-0.5]].forEach(function(c){
+    var p=new T.Mesh(new T.CylinderGeometry(0.5,0.6,1.4,16),M.pier); p.position.set(c[0],-0.7,c[1]); p.castShadow=true; pod.add(p);
+  });
+  pod.position.y=0.6;
+
+  // ground shadow catcher
+  var gp=new T.Mesh(new T.PlaneGeometry(60,60), new T.ShadowMaterial({opacity:0.28}));
+  gp.rotation.x=-Math.PI/2; gp.position.y=-1.4; gp.receiveShadow=true; scene.add(gp);
+
+  // lights: hemi + ambient + warm key + cyan rim
+  scene.add(new T.HemisphereLight(0x2a4a5a,0x05080d,0.75));
+  scene.add(new T.AmbientLight(0x33465a,0.28));
+  var key=new T.DirectionalLight(0xfff2dc,1.05); key.position.set(12,18,9); key.castShadow=true;
+  key.shadow.mapSize.set(1024,1024); var sc=key.shadow.camera; sc.near=1; sc.far=80; sc.left=-18; sc.right=18; sc.top=18; sc.bottom=-18; sc.updateProjectionMatrix(); scene.add(key);
+  var rim=new T.DirectionalLight(0x22B8D6,0.9); rim.position.set(-14,7,-12); scene.add(rim);
+  var fill=new T.PointLight(0xF5A623,0.5,40); fill.position.set(10,7,2); scene.add(fill);
+
+  // camera + custom orbit
+  var camera=new T.PerspectiveCamera(42,1,0.1,200);
+  var target=new T.Vector3(0,4.6,0), R=27, theta=0.9, phi=1.15, autoT=0.0;
+  function place(){ camera.position.set(target.x+R*Math.sin(phi)*Math.cos(theta), target.y+R*Math.cos(phi), target.z+R*Math.sin(phi)*Math.sin(theta)); camera.lookAt(target); }
+  function size(){ var w=canvas.clientWidth,h=canvas.clientHeight||1; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+  var dragging=false,lx=0,ly=0,idle=0;
+  canvas.addEventListener('pointerdown',function(e){ dragging=true; lx=e.clientX; ly=e.clientY; idle=0; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener('pointermove',function(e){ if(!dragging)return; theta-=(e.clientX-lx)*0.006; phi=Math.max(0.45,Math.min(1.45,phi-(e.clientY-ly)*0.006)); lx=e.clientX; ly=e.clientY; idle=0; });
+  function up(){ dragging=false; } canvas.addEventListener('pointerup',up); canvas.addEventListener('pointerleave',up);
+  canvas.addEventListener('wheel',function(e){ e.preventDefault(); R=Math.max(18,Math.min(42,R+e.deltaY*0.02)); },{passive:false});
+
+  // intro scale-in
+  var t0=null, intro=0;
+  function loop(ts){ if(t0==null)t0=ts; var dt=Math.min(0.05,(ts-t0)/1000); t0=ts;
+    if(intro<1){ intro=Math.min(1,intro+dt*1.1); var s=0.6+0.4*(1-Math.pow(1-intro,3)); pod.scale.set(s,s,s); pod.rotation.y=(1-intro)*0.5; }
+    if(!dragging){ idle+=dt; if(idle>0.6) theta+=dt*0.18; }
+    place(); renderer.render(scene,camera); requestAnimationFrame(loop);
+  }
+  canvas.addEventListener('webglcontextlost',function(e){ e.preventDefault(); document.body.classList.add('nowebgl'); },false);
+  size(); place(); window.addEventListener('resize',size); requestAnimationFrame(loop);
+})();
+</script></body></html>

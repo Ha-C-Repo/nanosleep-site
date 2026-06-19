@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--cyan);z-index:200;transition:width .08s linear;}
 :root{
   --navy:#050D1A; --cyan:#22B8D6; --orange:#F5A623; --text:#F0F2F5;
   --muted:rgba(240,242,245,0.45); --panel:rgba(10,20,40,0.7); --border:rgba(34,184,214,0.2);
@@ -158,6 +159,7 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
 </style>
 </head>
 <body>
+<div id="prog" aria-hidden="true"></div>
 <nav class="nav" aria-label="Primary">
   <a class="brand" href="#hero" aria-label="NanoSleep home">
     <div class="wordmark">NANO<span class="sleep">SLEEP</span></div>
@@ -204,6 +206,7 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   <div class="wrap">
     <p class="eyebrow reveal">NS-TECH-001 · Twin + Full Configurations</p>
     <h2 class="headline reveal">ENGINEERED<br><span class="cy">FOR THE ROAD.</span></h2>
+    <iframe class="frame reveal" src="NanoSleep_Pod_Render.html" title="NanoSleep Twin Pod interactive 3D model" loading="lazy" style="height:520px;margin:32px 0 8px;"></iframe>
     <div class="two-col">
       <div class="spec-card reveal">
         <div class="ctitle">Configuration A . Twin Pod</div>
@@ -401,6 +404,8 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   /* FORM (no backend; review build) */
   var form=document.getElementById('inquiry'), note=document.getElementById('formNote');
   form.addEventListener('submit', function(e){ e.preventDefault(); note.textContent='Thank you. This is a review build; email matthew@nanocubeusa.com directly for now.'; });
+  var prog=document.getElementById('prog');
+  window.addEventListener('scroll',function(){ var h=document.documentElement; var sc=h.scrollTop/((h.scrollHeight-h.clientHeight)||1); prog.style.width=(sc*100)+'%'; },{passive:true});
 })();
 </script>
 </body>
