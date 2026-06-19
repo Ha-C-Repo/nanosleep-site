@@ -81,9 +81,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 8
   function up(){ dragging=false; } canvas.addEventListener('pointerup',up); canvas.addEventListener('pointerleave',up);
   canvas.addEventListener('wheel',function(e){ e.preventDefault(); R=Math.max(20,Math.min(52,R+e.deltaY*0.02)); },{passive:false});
 
-  var t0=null,el=0;
-  function loop(ts){ if(t0==null)t0=ts; var dt=Math.min(0.05,(ts-t0)/1000); t0=ts; el+=dt;
-    for(var i=0;i<pods.length;i++){ var p=pods[i],d=p.userData.delay; if(el>d){ var k=Math.min(1,(el-d)*1.6); var s=k<1?(1-Math.pow(1-k,3)):1; p.scale.set(s,s,s); } }
+  var tStart=null,tPrev=null;
+  function loop(ts){ if(tStart==null){tStart=ts;tPrev=ts;} var dt=Math.min(0.05,(ts-tPrev)/1000); tPrev=ts; var el=(ts-tStart)/1000;
+    for(var i=0;i<pods.length;i++){ var p=pods[i],d=p.userData.delay; var k=Math.max(0,Math.min(1,(el-d)*2.2)); var s=k<=0?0.001:(1-Math.pow(1-k,3)); p.scale.set(s,s,s); }
     if(!dragging){ idle+=dt; if(idle>0.6) theta+=dt*0.045; }
     place(); renderer.render(scene,camera); requestAnimationFrame(loop);
   }
