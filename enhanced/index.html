@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NanoSleep · Highway Sleep Pods · a Nano Cube USA company</title>
+<meta name="description" content="NanoSleep is the first prefabricated structural steel sleep pod network for American highways. Solar-powered, fully off-grid, operational in 16 weeks. A Nano Cube USA company." />
+<meta property="og:title" content="NanoSleep · Sleep Anywhere" />
+<meta property="og:description" content="Prefabricated structural steel sleep pods for American highways. Solar-powered. Off-grid. Operational in 16 weeks." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#050D1A; --cyan:#22B8D6; --orange:#F5A623; --text:#F0F2F5;
+  --muted:rgba(240,242,245,0.45); --panel:rgba(10,20,40,0.7); --border:rgba(34,184,214,0.2);
+  --display:'Big Shoulders Display',sans-serif; --body:'Work Sans',sans-serif; --mono:'Courier New',monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--navy);color:var(--text);font-family:var(--body);scroll-behavior:smooth;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;display:block;}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;width:100%;height:64px;z-index:100;
+  background:rgba(5,13,26,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(34,184,214,0.15);display:flex;align-items:center;justify-content:space-between;padding:0 40px;}
+.brand{line-height:1;}
+.brand .wordmark{font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:0.08em;color:#fff;}
+.brand .wordmark .sleep{color:var(--cyan);}
+.brand .sub{font-family:var(--body);font-size:9px;letter-spacing:0.2em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-top:3px;}
+.navlinks{display:flex;gap:30px;align-items:center;}
+.navlinks a{font-family:var(--body);font-weight:400;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);transition:color .2s,border-color .2s;border-bottom:2px solid transparent;padding-bottom:3px;}
+.navlinks a:hover{color:var(--cyan);}
+.navlinks a.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;width:36px;height:30px;}
+.hamburger span{display:block;width:20px;height:2px;background:var(--cyan);margin:3px 0;transition:.2s;}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;width:100%;z-index:99;background:rgba(5,13,26,0.97);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.mobile-menu a{display:block;padding:16px 40px;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.7);border-bottom:1px solid rgba(255,255,255,0.05);}
+.mobile-menu a:hover{color:var(--cyan);}
+.mobile-menu.open{display:block;}
+
+/* LAYOUT */
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px;}
+section{min-height:100vh;padding:120px 0;position:relative;}
+.divider{height:1px;background:rgba(34,184,214,0.12);border:0;margin:0;}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.28em;color:var(--cyan);text-transform:uppercase;margin-bottom:24px;}
+.headline{font-family:var(--display);font-weight:900;font-size:clamp(48px,7vw,96px);text-transform:uppercase;line-height:0.9;letter-spacing:-0.02em;margin:0;}
+.headline .cy{color:var(--cyan);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+/* HERO */
+#hero{display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
+#starfield{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.hero-inner{position:relative;z-index:1;max-width:760px;padding:0 24px;}
+.hero-h{font-family:var(--display);font-weight:900;font-size:clamp(72px,13vw,140px);line-height:0.86;letter-spacing:-0.03em;text-transform:uppercase;margin:0;}
+.hero-h .cy{color:var(--cyan);display:block;}
+.hero-sub{font-family:var(--body);font-weight:300;font-size:20px;line-height:1.6;max-width:560px;margin:28px auto 0;color:rgba(255,255,255,0.6);}
+.hero-stats{display:inline-flex;gap:32px;margin-top:48px;flex-wrap:wrap;justify-content:center;}
+.hstat{border-left:2px solid currentColor;padding-left:20px;text-align:left;transition:border-bottom-color .2s;border-bottom:3px solid transparent;}
+.hstat.cy{color:var(--cyan);} .hstat.or{color:var(--orange);}
+.hstat .num{font-family:var(--display);font-weight:900;font-size:48px;line-height:1;}
+.hstat .lab{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--muted);margin-top:8px;text-transform:uppercase;}
+.hstat.cy:hover,.hstat.or:hover{border-bottom-color:var(--orange);}
+.scroll-ind{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:1;text-align:center;opacity:0.3;}
+.scroll-ind .line{width:1px;height:36px;background:#fff;margin:0 auto 8px;}
+.scroll-ind .t{font-family:var(--mono);font-size:10px;letter-spacing:0.3em;}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
+.scroll-ind{animation:bounce 2.4s ease-in-out infinite;}
+
+/* POD */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:48px;}
+.spec-card{background:rgba(10,20,40,0.8);border:1px solid var(--border);padding:40px;border-radius:2px;}
+.spec-card .ctitle{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--cyan);text-transform:uppercase;margin-bottom:18px;}
+.spec-row{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;}
+.spec-row .k{font-family:var(--body);font-weight:400;font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.12em;text-transform:uppercase;}
+.spec-row .v{font-family:var(--body);font-weight:500;font-size:14px;color:var(--text);text-align:right;}
+.accent-bar{height:3px;width:60px;background:var(--orange);margin-top:24px;}
+.lede{font-family:var(--body);font-weight:300;font-size:17px;line-height:1.8;color:rgba(255,255,255,0.65);}
+.lede + .lede{margin-top:20px;}
+.pills{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;}
+.pill{border:1px solid rgba(34,184,214,0.3);padding:8px 16px;font-size:11px;letter-spacing:0.14em;color:var(--cyan);text-transform:uppercase;border-radius:2px;}
+.statbar{background:rgba(34,184,214,0.06);border-top:1px solid rgba(34,184,214,0.15);border-bottom:1px solid rgba(34,184,214,0.15);padding:48px 0;margin-top:80px;}
+.statbar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:1200px;margin:0 auto;padding:0 40px;}
+.bigstat .num{font-family:var(--display);font-weight:900;font-size:clamp(36px,4vw,56px);color:var(--cyan);line-height:1;}
+.bigstat .lab{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:rgba(255,255,255,0.4);margin-top:8px;text-transform:uppercase;}
+
+/* TECH */
+.intro{max-width:640px;font-family:var(--body);font-weight:300;font-size:17px;line-height:1.8;color:rgba(255,255,255,0.6);}
+.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;}
+.tcard{background:var(--panel);border:1px solid rgba(34,184,214,0.15);padding:32px;border-radius:2px;transition:border-color .2s,transform .2s;}
+.tcard:hover{border-color:rgba(34,184,214,0.5);transform:translateY(-2px);}
+.ticon{width:40px;height:40px;background:rgba(34,184,214,0.1);border-radius:2px;display:flex;align-items:center;justify-content:center;}
+.tcard h3{font-family:var(--display);font-weight:700;font-size:20px;color:var(--text);margin:20px 0 0;text-transform:uppercase;letter-spacing:0.01em;}
+.tcard .tspec{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:0.12em;margin-top:6px;}
+.tcard p{font-family:var(--body);font-weight:400;font-size:14px;line-height:1.7;color:rgba(255,255,255,0.55);margin-top:12px;}
+
+/* IFRAME SECTIONS */
+.frame{width:100%;height:720px;border:1px solid var(--border);border-radius:2px;display:block;background:#03070f;transition:box-shadow .3s;}
+.frame:hover{box-shadow:0 0 40px rgba(34,184,214,0.15);}
+.subtext{font-family:var(--body);font-weight:300;font-size:17px;color:rgba(255,255,255,0.55);max-width:520px;margin:0 0 48px;line-height:1.7;}
+.callouts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;}
+.callouts.four{grid-template-columns:repeat(4,1fr);}
+.callout{border-left:2px solid var(--cyan);padding-left:20px;}
+.callout.or{border-left-color:var(--orange);}
+.callout .lab{font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:0.18em;text-transform:uppercase;}
+.callout.or .lab{color:var(--orange);}
+.callout .val{font-family:var(--display);font-weight:700;font-size:22px;color:var(--text);margin-top:4px;}
+.cluster-wrap{position:relative;}
+.cluster-tag{position:absolute;top:14px;left:14px;z-index:2;font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:rgba(255,255,255,0.4);text-transform:uppercase;pointer-events:none;}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:48px;}
+.cinfo{max-width:440px;}
+.cblock{display:flex;flex-direction:column;gap:24px;margin-top:40px;}
+.crow .lab{font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:0.14em;text-transform:uppercase;display:block;margin-bottom:6px;}
+.crow .val{font-family:var(--body);font-weight:500;font-size:16px;color:var(--text);}
+.csub{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;color:rgba(255,255,255,0.2);margin-top:48px;text-transform:uppercase;}
+form{display:flex;flex-direction:column;gap:16px;}
+label.fl{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-bottom:-8px;}
+input,select,textarea{background:rgba(10,20,40,0.6);border:1px solid var(--border);border-radius:2px;color:var(--text);font-family:var(--body);font-size:15px;padding:14px 18px;width:100%;outline:none;transition:border-color .2s;}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);}
+.submit{background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:0.14em;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:background .2s,color .2s;align-self:flex-start;}
+.submit:hover{background:var(--cyan);color:var(--navy);}
+.form-note{font-family:var(--mono);font-size:11px;color:var(--cyan);margin-top:4px;min-height:14px;}
+
+/* FOOTER */
+footer{padding:40px;border-top:1px solid rgba(34,184,214,0.1);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+footer .l{font-family:var(--body);font-weight:400;font-size:12px;color:rgba(255,255,255,0.25);}
+footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
+
+@media (max-width:768px){
+  .nav{padding:0 24px;}
+  .navlinks{display:none;}
+  .hamburger{display:block;}
+  section{padding:80px 0;}
+  .wrap{padding:0 24px;}
+  .two-col,.contact-grid{grid-template-columns:1fr;gap:40px;}
+  .tech-grid{grid-template-columns:1fr;}
+  .statbar-grid{grid-template-columns:repeat(2,1fr);padding:0 24px;}
+  .callouts,.callouts.four{grid-template-columns:1fr;}
+  .frame{height:480px;}
+  .hero-stats{gap:24px;}
+}
+@media (min-width:769px) and (max-width:1024px){ .tech-grid{grid-template-columns:repeat(2,1fr);} }
+@media (prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto;}
+  .reveal{opacity:1;transform:none;transition:none;}
+  .scroll-ind{animation:none;}
+}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Primary">
+  <a class="brand" href="#hero" aria-label="NanoSleep home">
+    <div class="wordmark">NANO<span class="sleep">SLEEP</span></div>
+    <div class="sub">a Nano Cube USA company</div>
+  </a>
+  <div class="navlinks">
+    <a href="#pod">Pod</a>
+    <a href="#technology">Technology</a>
+    <a href="#interior">Interior</a>
+    <a href="#site-cluster">Site</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#pod">Pod</a>
+  <a href="#technology">Technology</a>
+  <a href="#interior">Interior</a>
+  <a href="#site-cluster">Site</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<main>
+<!-- HERO -->
+<section id="hero">
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="hero-inner reveal">
+    <p class="eyebrow">Highway Rest · Off-Grid · Identity Verified</p>
+    <h1 class="hero-h">SLEEP<span class="cy">ANYWHERE.</span></h1>
+    <p class="hero-sub">The first prefabricated structural steel sleep pod network for American highways. Solar-powered. Fully off-grid. Operational in 16 weeks.</p>
+    <div class="hero-stats">
+      <div class="hstat cy"><div class="num">$76</div><div class="lab">Blended Nightly Rate</div></div>
+      <div class="hstat or"><div class="num">34%</div><div class="lab">Unleveraged IRR</div></div>
+    </div>
+  </div>
+  <div class="scroll-ind" aria-hidden="true"><div class="line"></div><div class="t">SCROLL</div></div>
+</section>
+<hr class="divider" />
+
+<!-- POD -->
+<section id="pod">
+  <div class="wrap">
+    <p class="eyebrow reveal">NS-TECH-001 · Twin + Full Configurations</p>
+    <h2 class="headline reveal">ENGINEERED<br><span class="cy">FOR THE ROAD.</span></h2>
+    <div class="two-col">
+      <div class="spec-card reveal">
+        <div class="ctitle">Configuration A . Twin Pod</div>
+        <div class="spec-row"><span class="k">Dimensions</span><span class="v">8'-0" W &times; 12'-0" L &times; 9'-0" H</span></div>
+        <div class="spec-row"><span class="k">Floor Area</span><span class="v">96 SF</span></div>
+        <div class="spec-row"><span class="k">Bed</span><span class="v">Twin 38" &times; 75" platform</span></div>
+        <div class="spec-row"><span class="k">Wet Zone</span><span class="v">32"&times;32" shower · toilet · sink</span></div>
+        <div class="spec-row"><span class="k">Structure</span><span class="v">HSS A500 Gr.B welded steel</span></div>
+        <div class="spec-row"><span class="k">Insulation</span><span class="v">4" EPS sandwich panel · R-26</span></div>
+        <div class="spec-row"><span class="k">Weight</span><span class="v">4,800 lbs empty · 7,200 lbs operational</span></div>
+        <div class="spec-row"><span class="k">Shipping</span><span class="v">Single flatbed · 48' trailer</span></div>
+        <div class="spec-row"><span class="k">Cost</span><span class="v">$14,012 all-in built + set</span></div>
+        <div class="accent-bar"></div>
+      </div>
+      <div class="reveal">
+        <p class="lede">Each NanoSleep Pod ships complete on a single flatbed and sets on a pre-poured 4-point concrete pad in one day. No utility connections required. No staff on-site. Every system is integrated, monitored remotely, and self-servicing.</p>
+        <p class="lede">Built entirely in-house at Nano Cube USA's AISC-certified Houston fabrication shop. CNC beam processing, AWS D1.1 welding, in-house CWI/NDT-II inspection. Two pods per week current capacity.</p>
+        <div class="pills">
+          <span class="pill">AISC Certified</span>
+          <span class="pill">Solar First</span>
+          <span class="pill">Zero Staff</span>
+          <span class="pill">16-Week Build</span>
+          <span class="pill">Off-Grid Water</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="statbar reveal">
+    <div class="statbar-grid">
+      <div class="bigstat"><div class="num">$14,012</div><div class="lab">Per Pod Built + Set</div></div>
+      <div class="bigstat"><div class="num">$303,563</div><div class="lab">10-Pod Hard CapEx</div></div>
+      <div class="bigstat"><div class="num">$375,000</div><div class="lab">Phase 1 Raise Target</div></div>
+      <div class="bigstat"><div class="num">96 SF</div><div class="lab">Twin Footprint</div></div>
+    </div>
+  </div>
+</section>
+<hr class="divider" />
+
+<!-- TECHNOLOGY -->
+<section id="technology">
+  <div class="wrap">
+    <p class="eyebrow reveal">MEP Systems · Smart Stack · Autonomous Operations</p>
+    <h2 class="headline reveal">TECHNOLOGY<br><span class="cy">INSIDE.</span></h2>
+    <p class="intro reveal">Every system is integrated and autonomous. Electrical is solar-first with LiFePO4 backup. Plumbing is fully self-contained. No municipal connections. All systems monitored remotely via 4G/LTE IoT gateway.</p>
+    <div class="tech-grid" id="techGrid"></div>
+  </div>
+</section>
+<hr class="divider" />
+
+<!-- INTERIOR -->
+<section id="interior">
+  <div class="wrap">
+    <p class="eyebrow reveal">NS-VIZ-INT-001 · Interactive 3D · Drag to Explore</p>
+    <h2 class="headline reveal">STEP<br><span class="cy">INSIDE.</span></h2>
+    <p class="subtext reveal">Explore every square foot of the Twin Pod interior. Drag to orbit. Scroll to zoom. Use the presets to jump to each zone.</p>
+    <iframe class="frame reveal" src="https://nanosleepinteriorrender.netlify.app/" title="NanoSleep interactive interior 3D render" loading="lazy"></iframe>
+    <div class="callouts">
+      <div class="callout"><div class="lab">Sleep Zone</div><div class="val">38" &times; 75" Platform Bed</div></div>
+      <div class="callout"><div class="lab">Wet Zone</div><div class="val">32" &times; 32" Shower + Toilet</div></div>
+      <div class="callout"><div class="lab">Smart Wall</div><div class="val">Linen Slot · NFC · USB-C</div></div>
+    </div>
+  </div>
+</section>
+<hr class="divider" />
+
+<!-- SITE CLUSTER -->
+<section id="site-cluster">
+  <div class="wrap">
+    <p class="eyebrow reveal">NS-VIZ-SITE-001 · Phase 1 · I-10 Corridor</p>
+    <h2 class="headline reveal">10 PODS.<br><span class="cy">ONE SITE.</span></h2>
+    <p class="subtext reveal">The Phase 1 prototype cluster. 10 Twin Pods, 140 feet of highway frontage, fully autonomous operations. No staff. No municipal utilities. Revenue from day one.</p>
+    <iframe class="frame reveal" src="NanoSleep_Site_Cluster_Render.html" title="NanoSleep Phase 1 site cluster 3D render" loading="lazy"></iframe>
+    <div class="callouts four">
+      <div class="callout or"><div class="lab">Annual Revenue</div><div class="val">$174,324</div></div>
+      <div class="callout or"><div class="lab">Net Operating Income</div><div class="val">$102,448</div></div>
+      <div class="callout or"><div class="lab">NOI Margin</div><div class="val">58.8%</div></div>
+      <div class="callout or"><div class="lab">Unleveraged IRR</div><div class="val">34%</div></div>
+    </div>
+  </div>
+</section>
+<hr class="divider" />
+
+<!-- CONTACT -->
+<section id="contact" style="min-height:80vh;">
+  <div class="wrap">
+    <p class="eyebrow reveal">Investor Inquiries · Site Partnerships · Press</p>
+    <h2 class="headline reveal">LET'S<br><span class="cy">TALK.</span></h2>
+    <div class="contact-grid">
+      <div class="cinfo reveal">
+        <p class="lede">NanoSleep is raising $375,000 for a 10-pod Phase 1 prototype on the I-10 corridor. Qualified investors, site operators, and press inquiries welcome.</p>
+        <div class="cblock">
+          <div class="crow"><span class="lab">Name</span><span class="val">Matthew S. Cruz · CEO, Nano Cube USA</span></div>
+          <div class="crow"><span class="lab">Email</span><span class="val"><a href="mailto:matthew@nanocubeusa.com">matthew@nanocubeusa.com</a></span></div>
+          <div class="crow"><span class="lab">Phone</span><span class="val"><a href="tel:+17132552172">713.255.2172</a></span></div>
+          <div class="crow"><span class="lab">Location</span><span class="val">Houston, TX</span></div>
+        </div>
+        <div class="csub">A Nano Cube USA Company</div>
+      </div>
+      <div class="reveal">
+        <form id="inquiry" novalidate>
+          <label class="fl" for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required />
+          <label class="fl" for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required />
+          <label class="fl" for="f-company">Company</label>
+          <input id="f-company" name="company" type="text" autocomplete="organization" />
+          <label class="fl" for="f-type">Inquiry Type</label>
+          <select id="f-type" name="type">
+            <option>Investor Inquiry</option>
+            <option>Site Partnership</option>
+            <option>Press</option>
+            <option>General</option>
+          </select>
+          <label class="fl" for="f-msg">Message</label>
+          <textarea id="f-msg" name="message" rows="5"></textarea>
+          <button class="submit" type="submit">Send Inquiry</button>
+          <div class="form-note" id="formNote" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="l">&copy; 2026 Nano Cube USA, LLC · NanoSleep is a Nano Cube USA Company</div>
+  <div class="r">NS-WEB-001 · Confidential</div>
+</footer>
+
+<script>
+(function(){
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* TECH CARDS */
+  var I = {
+    sun:'<circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.9" y1="4.9" x2="7" y2="7"/><line x1="17" y1="17" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="7" y2="17"/><line x1="17" y1="7" x2="19.1" y2="4.9"/>',
+    shield:'<path d="M12 2l8 3v6c0 5-3.5 8-8 11-4.5-3-8-6-8-11V5z"/><line x1="9" y1="11" x2="9" y2="14"/><line x1="12" y1="10" x2="12" y2="15"/><line x1="15" y1="11" x2="15" y2="14"/>',
+    climate:'<path d="M12 3v18"/><path d="M5 8l7 4 7-4"/><path d="M5 16l7-4 7 4"/><circle cx="12" cy="12" r="1.4"/>',
+    scan:'<rect x="4" y="4" width="16" height="16" rx="1"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="12" cy="12" r="3"/>',
+    lock:'<rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.2"/>',
+    thermal:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    drop:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+    signal:'<line x1="6" y1="20" x2="6" y2="14"/><line x1="11" y1="20" x2="11" y2="10"/><line x1="16" y1="20" x2="16" y2="6"/><path d="M19 4a8 8 0 0 1 0 11"/>'
+  };
+  var cards = [
+    ['Solar Power','2×400W · 5kWh LiFePO4','Two 400W panels feed a 48V 100Ah LiFePO4 battery bank via a 60A MPPT controller. 3kW inverter. Grid tie-in as backup only.','sun'],
+    ['UV-C Sanitation','4× 40W · 254nm','Four ceiling-mounted UV-C LED fixtures activate on checkout via PIR hard interlock. Full-room germicidal dose verified by spectrometer before each guest cycle.','shield'],
+    ['Climate Control','9K BTU · SEER22','App-controlled mini-split with variable-speed compressor. H13 HEPA fan provides 300 CFM exhaust and 8-minute full air exchange between guests.','climate'],
+    ['LiDAR Checkout','3D Ceiling Scanner','A ceiling-mounted LiDAR scanner captures a full 3D point cloud at checkout. Automated debris detection flags damage and triggers penalty billing via Stripe before the next booking is confirmed.','scan'],
+    ['Smart Access','TTLock Cloud API','18-gauge insulated steel entry door with commercial-grade smart mortise lock. Guest PIN or NFC tap delivered at booking confirmation. Auto-expires on checkout. Remote override via IoT gateway.','lock'],
+    ['Thermal IR','160×120 LWIR','Entry-mounted thermal IR camera confirms vacancy before the UV-C cycle begins. Secondary safety interlock. UV-C cannot activate with an organic heat signature present.','thermal'],
+    ['Off-Grid Water','150-gal Fresh · 65 Grey · 80 Black','Fully self-contained plumbing. No municipal connection required. NSF 61 HDPE tanks with exterior pump-out ports. Bi-weekly service via linen and tank truck.','drop'],
+    ['IoT Gateway','4G/LTE · Real-Time','An onboard 4G/LTE gateway streams occupancy state, UV-C cycle status, tank levels, solar output, and booking data to a live dashboard. Full API for operator monitoring.','signal']
+  ];
+  var grid = document.getElementById('techGrid');
+  cards.forEach(function(c){
+    var el = document.createElement('div');
+    el.className = 'tcard reveal';
+    el.innerHTML = '<div class="ticon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22B8D6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+I[c[3]]+'</svg></div>'+
+      '<h3>'+c[0]+'</h3><div class="tspec">'+c[1]+'</div><p>'+c[2]+'</p>';
+    grid.appendChild(el);
+  });
+
+  /* STARFIELD */
+  var cv = document.getElementById('starfield');
+  if(cv){
+    var cx = cv.getContext('2d'), stars=[], W,H;
+    function sz(){ W=cv.width=cv.offsetWidth; H=cv.height=cv.offsetHeight; }
+    function seed(){ stars=[]; var n=Math.min(200, Math.round(W*H/9000)); for(var i=0;i<n;i++){ stars.push({x:Math.random()*W,y:Math.random()*H,r:0.5+Math.random(),o:0.1+Math.random()*0.3,s:0.08+Math.random()*0.22}); } }
+    function draw(){ cx.clearRect(0,0,W,H); for(var i=0;i<stars.length;i++){ var s=stars[i]; cx.globalAlpha=s.o; cx.fillStyle='#fff'; cx.beginPath(); cx.arc(s.x,s.y,s.r,0,6.283); cx.fill(); } cx.globalAlpha=1; }
+    function step(){ for(var i=0;i<stars.length;i++){ var s=stars[i]; s.y-=s.s; if(s.y<0){ s.y=H; s.x=Math.random()*W; } } draw(); if(!reduced) requestAnimationFrame(step); }
+    sz(); seed(); draw(); if(!reduced) requestAnimationFrame(step);
+    window.addEventListener('resize', function(){ sz(); seed(); draw(); });
+  }
+
+  /* MOBILE NAV */
+  var hb=document.getElementById('hamburger'), mm=document.getElementById('mobileMenu');
+  hb.addEventListener('click', function(){ var open=mm.classList.toggle('open'); hb.setAttribute('aria-expanded', open?'true':'false'); });
+  mm.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ mm.classList.remove('open'); hb.setAttribute('aria-expanded','false'); }); });
+
+  /* REVEAL ON SCROLL */
+  if('IntersectionObserver' in window && !reduced){
+    var ro=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } }); }, {threshold:0.1});
+    document.querySelectorAll('.reveal').forEach(function(el){ ro.observe(el); });
+  } else { document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); }); }
+
+  /* ACTIVE NAV HIGHLIGHT */
+  var links=Array.prototype.slice.call(document.querySelectorAll('.navlinks a'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  if('IntersectionObserver' in window){
+    var no=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ var id=e.target.id; links.forEach(function(l){l.classList.remove('active');}); if(map[id]) map[id].classList.add('active'); } }); }, {threshold:0.5});
+    document.querySelectorAll('main section').forEach(function(s){ no.observe(s); });
+  }
+
+  /* FORM (no backend; review build) */
+  var form=document.getElementById('inquiry'), note=document.getElementById('formNote');
+  form.addEventListener('submit', function(e){ e.preventDefault(); note.textContent='Thank you. This is a review build; email matthew@nanocubeusa.com directly for now.'; });
+})();
+</script>
+</body>
+</html>

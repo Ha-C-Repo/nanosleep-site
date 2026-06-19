@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NanoSleep Website · Review · Two Versions</title>
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root{--navy:#050D1A;--cyan:#22B8D6;--orange:#F5A623;--text:#F0F2F5;--muted:rgba(240,242,245,0.45);--panel:rgba(10,20,40,0.7);--border:rgba(34,184,214,0.2);--display:'Big Shoulders Display',sans-serif;--body:'Work Sans',sans-serif;--mono:'Courier New',monospace;}
+*{box-sizing:border-box;}
+html,body{margin:0;background:var(--navy);color:var(--text);font-family:var(--body);}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+.wrap{max-width:1040px;margin:0 auto;padding:64px 32px 80px;}
+.brand .wordmark{font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:0.08em;color:#fff;}
+.brand .wordmark .s{color:var(--cyan);}
+.brand .sub{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-top:4px;}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.28em;color:var(--cyan);text-transform:uppercase;margin:48px 0 18px;}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(40px,6vw,72px);text-transform:uppercase;line-height:0.92;letter-spacing:-0.02em;margin:0 0 16px;}
+h1 .cy{color:var(--cyan);}
+.lede{font-family:var(--body);font-weight:300;font-size:18px;line-height:1.7;color:rgba(255,255,255,0.6);max-width:680px;}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:48px 0 8px;}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:2px;padding:32px;display:flex;flex-direction:column;}
+.card.reco{border-color:rgba(245,166,35,0.5);}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);}
+.card.reco .tag{color:var(--orange);}
+.card h2{font-family:var(--display);font-weight:700;font-size:26px;text-transform:uppercase;margin:14px 0 6px;}
+.card p{font-family:var(--body);font-weight:300;font-size:15px;line-height:1.7;color:rgba(255,255,255,0.6);margin:0 0 20px;flex:1;}
+.btn{display:inline-block;align-self:flex-start;border:1px solid var(--cyan);color:var(--cyan);font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:0.12em;text-transform:uppercase;padding:13px 28px;transition:background .2s,color .2s;}
+.btn:hover{background:var(--cyan);color:var(--navy);}
+.card.reco .btn{border-color:var(--orange);color:var(--orange);}
+.card.reco .btn:hover{background:var(--orange);color:var(--navy);}
+.diff{background:rgba(34,184,214,0.05);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:48px;padding:32px;border-radius:2px;}
+.diff h3{font-family:var(--display);font-weight:700;font-size:18px;text-transform:uppercase;margin:0 0 18px;color:var(--text);}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid rgba(255,255,255,0.07);vertical-align:top;}
+th{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);}
+td:first-child{font-weight:500;color:var(--text);width:32%;}
+.yes{color:var(--cyan);} .no{color:rgba(245,166,35,0.9);}
+.note{font-family:var(--body);font-size:13px;line-height:1.7;color:rgba(255,255,255,0.45);margin-top:28px;max-width:720px;}
+footer{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.2);text-align:center;padding:32px;border-top:1px solid rgba(34,184,214,0.1);letter-spacing:0.06em;}
+@media (max-width:760px){.cards{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><div class="wordmark">NANO<span class="s">SLEEP</span></div><div class="sub">a Nano Cube USA company</div></div>
+  <p class="eyebrow">NS-WEB-001 · Review Build · Two Versions</p>
+  <h1>SAME BRIEF.<br><span class="cy">TWO BUILDS.</span></h1>
+  <p class="lede">Both sites are built from your website brief and use your exact brand system, colors, type, and the six sections. One follows the brief literally. The other runs it through the NanoSleep project standard: voice rules, the confidentiality gate, accessibility, and a few recommended improvements. Open both and compare.</p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="tag">Version A · As Instructed</span>
+      <h2>Standard</h2>
+      <p>The brief built exactly as written. Faithful copy and layout, including the original phrasing.</p>
+      <a class="btn" href="standard/index.html">Open Standard</a>
+    </div>
+    <div class="card reco">
+      <span class="tag">Version B · Recommended</span>
+      <h2>Enhanced</h2>
+      <p>Same brief, run through the project standard: cleaner copy, the confidentiality fix, accessibility, and polish.</p>
+      <a class="btn" href="enhanced/index.html">Open Enhanced</a>
+    </div>
+  </div>
+
+  <div class="diff">
+    <h3>What changed, and why</h3>
+    <table>
+      <tr><th>Item</th><th>Standard (A)</th><th>Enhanced (B)</th></tr>
+      <tr><td>Em-dashes in copy</td><td class="no">Present (an AI tell)</td><td class="yes">Removed, hyphens and periods</td></tr>
+      <tr><td>Approximate weights</td><td class="no">"~4,800 lbs"</td><td class="yes">Exact, no tilde</td></tr>
+      <tr><td>Confidential vendor name</td><td class="no">Vendor name exposed publicly</td><td class="yes">Generalized to "4G/LTE gateway"</td></tr>
+      <tr><td>Accessibility</td><td class="no">None added</td><td class="yes">Landmarks, focus rings, labels, alt</td></tr>
+      <tr><td>Reduced motion</td><td class="no">Animations always run</td><td class="yes">Respects the user setting</td></tr>
+      <tr><td>Governance gate</td><td class="no">Blocks (em-dash + vendor leak)</td><td class="yes">Passes clean</td></tr>
+      <tr><td>Validated figures</td><td class="yes">Correct</td><td class="yes">Correct</td></tr>
+    </table>
+    <p class="note">Note on renders: the interactive interior render is the live version. The site-cluster panel is an illustrative stand-in for NS-VIZ-SITE-001 until the final render file is provided; it swaps in with one line. The financial figures shown ($174,324 revenue, $102,448 NOI, 58.8%, 34% IRR, $375,000 raise) match the validated model. This page is a private review build, not the public launch.</p>
+  </div>
+</div>
+<footer>NanoSleep · a Nano Cube USA Company · NS-WEB-001 · Review build for Matthew</footer>
+</body>
+</html>
