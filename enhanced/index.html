@@ -188,7 +188,7 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
 <!-- HERO -->
 <section id="hero">
   <canvas id="starfield" aria-hidden="true"></canvas>
-  <div class="hero-inner reveal">
+  <div class="hero-inner">
     <p class="eyebrow">Highway Rest · Off-Grid · Identity Verified</p>
     <h1 class="hero-h">SLEEP<span class="cy">ANYWHERE.</span></h1>
     <p class="hero-sub">The first prefabricated structural steel sleep pod network for American highways. Solar-powered. Fully off-grid. Operational in 16 weeks.</p>
@@ -406,6 +406,7 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   form.addEventListener('submit', function(e){ e.preventDefault(); note.textContent='Thank you. This is a review build; email matthew@nanocubeusa.com directly for now.'; });
   var prog=document.getElementById('prog');
   window.addEventListener('scroll',function(){ var h=document.documentElement; var sc=h.scrollTop/((h.scrollHeight-h.clientHeight)||1); prog.style.width=(sc*100)+'%'; },{passive:true});
+  setTimeout(function(){ var n=document.querySelectorAll('.reveal:not(.in)'); for(var i=0;i<n.length;i++) n[i].classList.add('in'); },1400);
 })();
 </script>
 </body>
