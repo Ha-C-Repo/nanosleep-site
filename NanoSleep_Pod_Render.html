@@ -90,15 +90,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 9
 
   // camera + orbit
   var camera=new T.PerspectiveCamera(40,1,0.1,300);
-  var target=new T.Vector3(0,4.6,0),R=33,theta=0.8,phi=1.29,idle=0,dragging=false,lx=0,ly=0;
+  var target=new T.Vector3(0,4.6,0),R=33,theta=0.8,phi=1.29,idle=0,dragging=false,lx=0,ly=0,vth=0,vph=0;
   function place(){camera.position.set(target.x+R*Math.sin(phi)*Math.cos(theta),target.y+R*Math.cos(phi),target.z+R*Math.sin(phi)*Math.sin(theta));camera.lookAt(target);}
   function size(){var w=canvas.clientWidth,h=canvas.clientHeight||1;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
   canvas.addEventListener('pointerdown',function(e){e.preventDefault();dragging=true;lx=e.clientX;ly=e.clientY;idle=0;canvas.setPointerCapture(e.pointerId);});
-  canvas.addEventListener('pointermove',function(e){if(!dragging)return;e.preventDefault();theta-=(e.clientX-lx)*0.006;phi=Math.max(0.5,Math.min(1.4,phi-(e.clientY-ly)*0.006));lx=e.clientX;ly=e.clientY;idle=0;});
+  canvas.addEventListener('pointermove',function(e){if(!dragging)return;e.preventDefault();var dx=e.clientX-lx,dy=e.clientY-ly;vth=-dx*0.006;vph=-dy*0.006;theta+=vth;phi=Math.max(0.5,Math.min(1.4,phi+vph));lx=e.clientX;ly=e.clientY;idle=0;});
   function up(){dragging=false;}canvas.addEventListener('pointerup',up);canvas.addEventListener('pointerleave',up);
   canvas.addEventListener('wheel',function(e){e.preventDefault();R=Math.max(18,Math.min(46,R+e.deltaY*0.02));},{passive:false});
   var tPrev=null;
-  function loop(ts){if(tPrev==null)tPrev=ts;var dt=Math.min(0.05,(ts-tPrev)/1000);tPrev=ts;if(!dragging){idle+=dt;if(idle>0.6)theta+=dt*0.16;}place();renderer.render(scene,camera);requestAnimationFrame(loop);}
+  function loop(ts){if(tPrev==null)tPrev=ts;var dt=Math.min(0.05,(ts-tPrev)/1000);tPrev=ts;if(!dragging){theta+=vth;phi=Math.max(0.5,Math.min(1.4,phi+vph));vth*=0.94;vph*=0.94;idle+=dt;if(Math.abs(vth)<0.0006&&idle>0.8)theta+=dt*0.14;}place();renderer.render(scene,camera);requestAnimationFrame(loop);}
   canvas.addEventListener('webglcontextlost',function(e){e.preventDefault();document.body.classList.add('nowebgl');},false);
   size();place();window.addEventListener('resize',size);requestAnimationFrame(loop);
 })();
