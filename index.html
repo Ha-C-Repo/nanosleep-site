@@ -87,6 +87,16 @@ section{min-height:100vh;padding:120px 0;position:relative;}
 .scroll-ind .t{font-family:var(--mono);font-size:10px;letter-spacing:0.3em;}
 @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
 .scroll-ind{animation:bounce 2.4s ease-in-out infinite;}
+/* PREMIUM HERO */
+#hero{background:#03070f;}
+.hero-bg{position:absolute;inset:0;z-index:0;background:#03070f url('NanoSleep_Pod_Photo_Hero.png') center/cover no-repeat;animation:kenburns 26s ease-in-out infinite alternate;will-change:transform;}
+.hero-scrim{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(5,13,26,.60) 0%,rgba(5,13,26,.16) 30%,rgba(5,13,26,.40) 66%,rgba(5,13,26,.94) 100%);}
+@keyframes kenburns{from{transform:scale(1.03)}to{transform:scale(1.14)}}
+.hero-h{text-shadow:0 8px 46px rgba(0,0,0,0.5);}
+.hero-cta{display:inline-flex;align-items:center;gap:10px;margin-top:40px;padding:16px 38px;border:1.5px solid var(--cyan);color:var(--cyan);font-family:var(--mono);font-size:12px;letter-spacing:0.22em;text-transform:uppercase;border-radius:3px;transition:background .2s,color .2s,box-shadow .2s;}
+.hero-cta:hover{background:var(--cyan);color:var(--navy);box-shadow:0 0 38px rgba(34,184,214,0.35);}
+.frame-hint{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin:12px 0 0;text-align:center;}
+@media (prefers-reduced-motion:reduce){.hero-bg{animation:none;}}
 
 /* POD */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:48px;}
@@ -213,14 +223,13 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
 <!-- HERO -->
 <section id="hero">
   <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-inner">
-    <p class="eyebrow">Highway Rest · Off-Grid · Identity Verified</p>
+    <p class="eyebrow">Highway Rest · Off-Grid · Solar-Powered</p>
     <h1 class="hero-h">SLEEP<span class="cy">ANYWHERE.</span></h1>
-    <p class="hero-sub">The first prefabricated structural steel sleep pod network for American highways. Solar-powered. Fully off-grid. Operational in 16 weeks.</p>
-    <div class="hero-stats">
-      <div class="hstat cy"><div class="num">$76</div><div class="lab">Blended Nightly Rate</div></div>
-      <div class="hstat or"><div class="num">34%</div><div class="lab">Unleveraged IRR</div></div>
-    </div>
+    <p class="hero-sub">Prefabricated structural steel sleep pods for the American highway. Solar-powered, fully off-grid, and ready the moment you are. A private room, anywhere the road takes you.</p>
+    <a href="#pod" class="hero-cta">Explore the pod in 3D &rsaquo;</a>
   </div>
   <div class="scroll-ind" aria-hidden="true"><div class="line"></div><div class="t">SCROLL</div></div>
 </section>
@@ -231,7 +240,8 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   <div class="wrap">
     <p class="eyebrow reveal">NS-TECH-001 · Twin + Full Configurations</p>
     <h2 class="headline reveal">ENGINEERED<br><span class="cy">FOR THE ROAD.</span></h2>
-    <iframe class="frame reveal" src="NanoSleep_Pod_Render.html" title="NanoSleep Twin Pod interactive 3D model" loading="lazy" style="height:520px;margin:32px 0 8px;"></iframe>
+    <iframe class="frame reveal" src="NanoSleep_Pod_Render.html" title="NanoSleep Twin Pod interactive 3D model" loading="lazy" style="height:640px;margin:32px 0 8px;"></iframe>
+    <p class="frame-hint reveal">Drag to rotate &middot; Scroll to zoom &middot; Live interactive 3D model</p>
     <div class="two-col">
       <div class="spec-card reveal">
         <div class="ctitle">Configuration A . Twin Pod</div>
@@ -243,7 +253,7 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
         <div class="spec-row"><span class="k">Insulation</span><span class="v">4" EPS sandwich panel · R-26</span></div>
         <div class="spec-row"><span class="k">Weight</span><span class="v">4,800 lbs empty · 7,200 lbs operational</span></div>
         <div class="spec-row"><span class="k">Shipping</span><span class="v">Single flatbed · 48' trailer</span></div>
-        <div class="spec-row"><span class="k">Cost</span><span class="v">$14,012 all-in built + set</span></div>
+        <div class="spec-row"><span class="k">Power</span><span class="v">Solar + LiFePO4 · fully off-grid</span></div>
         <div class="accent-bar"></div>
       </div>
       <div class="reveal">
@@ -261,10 +271,10 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   </div>
   <div class="statbar reveal">
     <div class="statbar-grid">
-      <div class="bigstat"><div class="num">$14,012</div><div class="lab">Per Pod Built + Set</div></div>
-      <div class="bigstat"><div class="num">$303,563</div><div class="lab">10-Pod Hard CapEx</div></div>
-      <div class="bigstat"><div class="num">$375,000</div><div class="lab">Phase 1 Raise Target</div></div>
-      <div class="bigstat"><div class="num">96 SF</div><div class="lab">Twin Footprint</div></div>
+      <div class="bigstat"><div class="num">96 SF</div><div class="lab">Twin Pod Footprint</div></div>
+      <div class="bigstat"><div class="num">16 wk</div><div class="lab">Concept To On-Site</div></div>
+      <div class="bigstat"><div class="num">100%</div><div class="lab">Solar &middot; Off-Grid</div></div>
+      <div class="bigstat"><div class="num">R-26</div><div class="lab">Insulated Steel Shell</div></div>
     </div>
   </div>
 </section>
@@ -302,13 +312,13 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   <div class="wrap">
     <p class="eyebrow reveal">NS-VIZ-SITE-001 · Phase 1 · I-10 Corridor</p>
     <h2 class="headline reveal">10 PODS.<br><span class="cy">ONE SITE.</span></h2>
-    <p class="subtext reveal">The Phase 1 prototype cluster. 10 Twin Pods, 140 feet of highway frontage, fully autonomous operations. No staff. No municipal utilities. Revenue from day one.</p>
+    <p class="subtext reveal">The Phase 1 cluster. 10 Twin Pods, 140 feet of highway frontage, fully autonomous operations. No staff. No municipal utilities. Off-grid solar power.</p>
     <iframe class="frame reveal" src="NanoSleep_Site_Cluster_Render.html" title="NanoSleep Phase 1 site cluster 3D render" loading="lazy"></iframe>
     <div class="callouts four">
-      <div class="callout or"><div class="lab">Annual Revenue</div><div class="val">$174,324</div></div>
-      <div class="callout or"><div class="lab">Net Operating Income</div><div class="val">$102,448</div></div>
-      <div class="callout or"><div class="lab">NOI Margin</div><div class="val">58.8%</div></div>
-      <div class="callout or"><div class="lab">Unleveraged IRR</div><div class="val">34%</div></div>
+      <div class="callout"><div class="lab">Phase 1 Cluster</div><div class="val">10 Twin Pods</div></div>
+      <div class="callout"><div class="lab">Highway Frontage</div><div class="val">140 Feet</div></div>
+      <div class="callout"><div class="lab">Utilities</div><div class="val">100% Off-Grid</div></div>
+      <div class="callout"><div class="lab">Operations</div><div class="val">Fully Autonomous</div></div>
     </div>
   </div>
 </section>
@@ -317,11 +327,11 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
 <!-- CONTACT -->
 <section id="contact" style="min-height:80vh;">
   <div class="wrap">
-    <p class="eyebrow reveal">Investor Inquiries · Site Partnerships · Press</p>
+    <p class="eyebrow reveal">Site Partnerships · Press · General Inquiries</p>
     <h2 class="headline reveal">LET'S<br><span class="cy">TALK.</span></h2>
     <div class="contact-grid">
       <div class="cinfo reveal">
-        <p class="lede">NanoSleep is raising $375,000 for a 10-pod Phase 1 prototype on the I-10 corridor. Qualified investors, site operators, and press inquiries welcome.</p>
+        <p class="lede">NanoSleep is bringing private, off-grid sleep pods to the American highway, built in-house at Nano Cube USA. Site operators, partners, and press are welcome to reach out.</p>
         <div class="cblock">
           <div class="crow"><span class="lab">Name</span><span class="val">Matthew S. Cruz · CEO, Nano Cube USA</span></div>
           <div class="crow"><span class="lab">Email</span><span class="val"><a href="mailto:matthew@nanocubeusa.com">matthew@nanocubeusa.com</a></span></div>
@@ -340,10 +350,10 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
           <input id="f-company" name="company" type="text" autocomplete="organization" />
           <label class="fl" for="f-type">Inquiry Type</label>
           <select id="f-type" name="type">
-            <option>Investor Inquiry</option>
+            <option>General</option>
             <option>Site Partnership</option>
             <option>Press</option>
-            <option>General</option>
+            <option>Booking Interest</option>
           </select>
           <label class="fl" for="f-msg">Message</label>
           <textarea id="f-msg" name="message" rows="5"></textarea>
