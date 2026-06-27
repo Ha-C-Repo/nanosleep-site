@@ -183,7 +183,16 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   .statbar-grid{grid-template-columns:repeat(2,1fr);padding:0 24px;}
   .callouts,.callouts.four{grid-template-columns:1fr;}
   .frame{height:480px;}
-  .hero-stats{gap:24px;}
+  #pod .frame{height:62vh;min-height:380px;}
+  /* mobile hero: show the WHOLE pod (landscape image was cover-cropping its sides) */
+  #hero{min-height:90vh;}
+  .hero-bg{background-size:contain;background-position:center 40%;background-repeat:no-repeat;background-color:#060f1c;}
+  .hero-h{font-size:clamp(52px,15vw,92px);}
+  .hero-sub{font-size:16px;margin-top:18px;}
+  .hero-cta{margin-top:26px;padding:13px 26px;}
+}
+@media (max-width:768px) and (orientation:landscape){
+  .hero-bg{background-size:cover;}
 }
 @media (min-width:769px) and (max-width:1024px){ .tech-grid{grid-template-columns:repeat(2,1fr);} }
 @media (prefers-reduced-motion:reduce){
