@@ -26,23 +26,23 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;touch-ac
   var root=new T.Group(); scene.add(root);
 
   function mat(c,m,r,e,ei){ var o={color:c,metalness:m,roughness:r}; if(e!=null){o.emissive=e;o.emissiveIntensity=ei||1;} return new T.MeshStandardMaterial(o); }
-  var M={ body:mat(0x44586b,0.55,0.5), tube:mat(0x6b8a9a,0.85,0.32), solar:mat(0x081626,0.92,0.18,0x06243a,0.22),
-    door:mat(0x161f2a,0.5,0.6), warm:mat(0x3a2a12,0.3,0.5,0xF5A623,1.5), cool:mat(0x103040,0.3,0.5,0x22B8D6,1.2),
-    ground:mat(0x0e1822,0.1,0.92), road:mat(0x0c121a,0.1,0.9), lane:mat(0x3a2c10,0.2,0.6,0xF5A623,0.5), pier:mat(0x0c141d,0.3,0.85), pad:mat(0x1a2733,0.2,0.85) };
+  var M={ body:mat(0x28333f,0.45,0.5), trim:mat(0x9fa6ad,0.3,0.55), tube:mat(0x6b8a9a,0.85,0.32), solar:mat(0x081626,0.92,0.18,0x06243a,0.22),
+    door:mat(0x161f2a,0.5,0.6), warm:mat(0x3a2a12,0.3,0.5,0xF5A623,1.7), cool:mat(0x103040,0.3,0.5,0x22B8D6,1.2),
+    ground:mat(0x0e1822,0.1,0.92), road:mat(0x0c121a,0.1,0.9), lane:mat(0x3a2c10,0.2,0.6,0xF5A623,0.5), pier:mat(0xa9adb2,0.25,0.6), pad:mat(0x1a2733,0.2,0.85) };
   function box(p,material,w,h,d,x,y,z){ var m=new T.Mesh(new T.BoxGeometry(w,h,d),material); m.position.set(x||0,y||0,z||0); m.castShadow=true; m.receiveShadow=true; p.add(m); return m; }
 
   // compact pod builder (W2 x L3 x H2.4), lit = warm(occupied)/cool(vacant)
   function pod(px,pz,lit,delay){ var grp=new T.Group(); var W=2.6,L=3.9,H=3.0,t=0.12;
-    box(grp,M.body,W-0.08,H-0.12,L-0.08,0,H/2,0);
-    [[-W/2,-L/2],[W/2,-L/2],[-W/2,L/2],[W/2,L/2]].forEach(function(c){ box(grp,M.tube,t,H,t,c[0],H/2,c[1]); });
-    box(grp,M.tube,W+t,t,t,0,H-0.05,-L/2); box(grp,M.tube,W+t,t,t,0,H-0.05,L/2);
-    box(grp,M.solar,W-0.2,0.06,L-0.5,0,H+0.08,0);
-    box(grp,M.door,0.7,1.5,0.06,0,0.78,L/2+0.02);
-    box(grp, lit?M.warm:M.cool, 0.06,0.7,1.0, W/2+0.02,1.3,-0.3);
-    box(grp, lit?M.warm:M.cool, 0.5,0.06,0.06, 0,1.7,L/2+0.03);
+    box(grp,M.trim,W+0.18,0.2,L+0.18,0,0.12,0);                 // base skirt
+    box(grp,M.body,W-0.08,H-0.5,L-0.08,0,H/2+0.05,0);           // navy clad body
+    [[-W/2,-L/2],[W/2,-L/2],[-W/2,L/2],[W/2,L/2]].forEach(function(c){ box(grp,M.trim,t,H-0.35,t,c[0],H/2+0.05,c[1]); }); // corner trims
+    box(grp,M.trim,W+0.18,0.16,L+0.18,0,H-0.02,0);              // coping cap
+    var s=box(grp,M.solar,W-0.3,0.05,L-0.7,0,H+0.18,0.1); s.rotation.x=-0.22; // tilted solar
+    box(grp,M.door,0.72,1.7,0.06,-0.5,0.95,L/2+0.02);           // door
+    box(grp, lit?M.warm:M.cool, 0.06,1.1,0.42, W/2+0.02,1.6,-0.4); // glowing window (vertical)
     [[-W/2+0.3,-L/2+0.3],[W/2-0.3,-L/2+0.3],[-W/2+0.3,L/2-0.3],[W/2-0.3,L/2-0.3]].forEach(function(c){
-      var p=new T.Mesh(new T.CylinderGeometry(0.14,0.16,0.5,10),M.pier); p.position.set(c[0],-0.2,c[1]); p.castShadow=true; grp.add(p); });
-    var pad=new T.Mesh(new T.BoxGeometry(W+0.7,0.12,L+0.7),M.pad); pad.position.y=-0.02; pad.receiveShadow=true; grp.add(pad);
+      var p=new T.Mesh(new T.CylinderGeometry(0.13,0.13,0.5,12),M.pier); p.position.set(c[0],-0.2,c[1]); p.castShadow=true; grp.add(p); });
+    var pad=new T.Mesh(new T.BoxGeometry(W+0.7,0.12,L+0.7),M.pad); pad.position.y=-0.06; pad.receiveShadow=true; grp.add(pad);
     grp.position.set(px,0,pz); grp.userData={delay:delay}; root.add(grp); return grp;
   }
 
