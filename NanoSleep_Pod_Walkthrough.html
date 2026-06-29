@@ -1,0 +1,168 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>NanoSleep Twin Pod - Walkthrough</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#03070f;font-family:'Courier New',monospace;color:#F0F2F5}
+#c{display:block;width:100%;height:100%;cursor:pointer}
+#hud{position:fixed;inset:0;pointer-events:none;z-index:3}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ background:radial-gradient(120% 90% at 50% 40%,rgba(11,26,44,.65),rgba(3,7,15,.92));text-align:center;z-index:4;cursor:pointer}
+#ov h1{font-size:26px;letter-spacing:.18em;margin:0 0 6px;color:#fff}
+#ov .cy{color:#22B8D6}
+#ov p{font-size:12px;letter-spacing:.14em;color:rgba(240,242,245,.65);line-height:2;margin:14px 0 0}
+#ov .k{color:#F5A623}
+#ov .go{margin-top:22px;font-size:13px;letter-spacing:.2em;color:#22B8D6;border:1px solid rgba(34,184,214,.5);padding:12px 26px;border-radius:2px}
+.tag{position:absolute;top:12px;left:14px;font-size:9px;letter-spacing:.22em;color:rgba(34,184,214,.7);text-transform:uppercase}
+.hint{position:absolute;bottom:12px;left:14px;font-size:9px;letter-spacing:.16em;color:rgba(240,242,245,.4);text-transform:uppercase}
+#dh{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;letter-spacing:.16em;
+ color:#22B8D6;opacity:0;transition:opacity .2s;text-transform:uppercase;text-shadow:0 0 6px rgba(0,0,0,.8)}
+#cross{position:absolute;top:50%;left:50%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:rgba(240,242,245,.5);opacity:0}
+.lock #cross{opacity:1}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="hud"><div class="tag">NanoSleep . Twin Pod . 8&times;12&times;9 . a Nano Cube USA company</div>
+<div id="cross"></div><div id="dh">Click / E - open door</div>
+<div class="hint">WASD move . mouse look . click door to open . ESC release</div></div>
+<div id="ov"><h1>NANOSLEEP <span class="cy">TWIN POD</span></h1>
+<p>Walk up to the pod . <span class="k">Click the door</span> to open it . Step inside.<br/>
+<span class="k">W A S D</span> move &nbsp; <span class="k">MOUSE</span> look &nbsp; <span class="k">E</span> door &nbsp; <span class="k">ESC</span> release</p>
+<div class="go">CLICK TO ENTER</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var T=THREE, canvas=document.getElementById('c');
+var renderer=new T.WebGLRenderer({canvas:canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,2)); renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap; renderer.outputEncoding=T.sRGBEncoding;
+var scene=new T.Scene(); scene.background=new T.Color(0x05111d); scene.fog=new T.Fog(0x05111d,14,46);
+var camera=new T.PerspectiveCamera(70,1,0.02,200);
+var yawO=new T.Object3D(); scene.add(yawO); yawO.add(camera);
+var EYE=1.62; yawO.position.set(1.22,EYE,6.3); var yaw=0,pitch=0;
+
+function M(c,m,r,e,ei,op){var o={color:c,metalness:m,roughness:r};if(e!=null){o.emissive=e;o.emissiveIntensity=ei||1;}if(op!=null){o.transparent=true;o.opacity=op;}return new T.MeshStandardMaterial(o);}
+var mat={body:M(0x2b3a4c,0.62,0.5),skin:M(0x26333f,0.4,0.62),tube:M(0x5a7787,0.85,0.3),door:M(0x18222e,0.5,0.55),
+ solar:M(0x081626,0.9,0.16,0x06243a,0.25),pier:M(0x8d8880,0,0.92),cyan:M(0x22B8D6,0.2,0.4,0x22B8D6,1.4),
+ amber:M(0xF5A623,0,0.5,0xF5A623,1.2),glass:M(0x9fd6e6,0,0.05,0x123040,0.2,0.18),
+ floor:M(0xb8a98c,0,0.7),bed:M(0xd9d3c6,0,0.75),wet:M(0xeef1f4,0,0.4),wall_in:M(0x415262,0.2,0.62),ceil:M(0x1c2730,0.2,0.7),liner:M(0xe9e3d6,0.0,0.85)};
+function box(p,mt,w,h,d,x,y,z){var m=new T.Mesh(new T.BoxGeometry(w,h,d),mt);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;p.add(m);return m;}
+function cyl(p,mt,r,h,x,y,z){var m=new T.Mesh(new T.CylinderGeometry(r,r,h,18),mt);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;p.add(m);return m;}
+
+var W=2.4384,H=2.7432,L=3.6576,t=0.07,dpW=0.9,dpH=2.06;
+var pod=new T.Group();scene.add(pod);pod.position.set(W/2,0,L/2);
+// local coords centered: x[-W/2..W/2], z[-L/2..L/2]
+var hw=W/2,hl=L/2,jamb=(W-dpW)/2;
+box(pod,mat.floor,W,0.12,L,0,0.06,0);
+box(pod,mat.ceil,W,t,L,0,H-t/2,0);
+box(pod,mat.skin,W,H,t,0,H/2,-hl);                 // back wall (-z)
+box(pod,mat.skin,t,H,L,-hw,H/2,0);                 // left
+box(pod,mat.skin,t,H,L,hw,H/2,0);                  // right (window cut visually via glass)
+// front (+z) split for door opening
+box(pod,mat.skin,jamb,H,t,-hw+jamb/2,H/2,hl);
+box(pod,mat.skin,jamb,H,t,hw-jamb/2,H/2,hl);
+box(pod,mat.skin,dpW,H-dpH,t,0,dpH+(H-dpH)/2,hl);  // header
+// bright interior wall + ceiling liners (inside faces) so the cabin reads light
+box(pod,mat.liner,W-2*t,H-2*t,0.02,0,H/2,-hl+t+0.02);
+box(pod,mat.liner,0.02,H-2*t,L-2*t,-hw+t+0.02,H/2,0);
+box(pod,mat.liner,0.02,H-2*t,L-2*t,hw-t-0.02,H/2,0);
+box(pod,mat.liner,W-2*t,0.02,L-2*t,0,H-t-0.02,0);
+box(pod,mat.liner,jamb-0.02,H-2*t,0.02,-hw+jamb/2,H/2,hl-t-0.02);
+box(pod,mat.liner,jamb-0.02,H-2*t,0.02,hw-jamb/2,H/2,hl-t-0.02);
+// exterior steel exposed corner tubes + rails
+var tt=0.1;[[-hw,-hl],[hw,-hl],[-hw,hl],[hw,hl]].forEach(function(c){box(pod,mat.tube,tt,H+0.05,tt,c[0],H/2,c[1]);});
+[0.12,H-0.06].forEach(function(y){box(pod,mat.tube,W+tt,tt,tt,0,y,-hl);box(pod,mat.tube,W+tt,tt,tt,0,y,hl);
+ box(pod,mat.tube,tt,tt,L+tt,-hw,y,0);box(pod,mat.tube,tt,tt,L+tt,hw,y,0);});
+// window on right wall (+x) with amber interior glow
+box(pod,mat.glass,0.04,1.0,0.66,hw,1.45,-0.4);
+box(pod,mat.amber,0.02,0.92,0.58,hw-t-0.03,1.45,-0.4);
+// roof solar
+[-0.9,0.9].forEach(function(z){var s=box(pod,mat.solar,W-0.4,0.06,0.8,0,H+0.06,z);s.rotation.x=0.06;});
+// piers
+[[-hw+0.3,-hl+0.3],[hw-0.3,-hl+0.3],[-hw+0.3,hl-0.3],[hw-0.3,hl-0.3]].forEach(function(c){box(pod,mat.pier,0.22,0.5,0.22,c[0],-0.2,c[1]);});
+// DOOR (hinged at left jamb), pivot group
+var hinge=new T.Group();hinge.position.set(-hw+jamb,0.06,hl);pod.add(hinge);
+var door=box(hinge,mat.door,dpW,dpH,0.05,dpW/2,dpH/2,0);
+var handle=box(hinge,mat.cyan,0.04,0.34,0.06,dpW-0.1,1.0,0.05);
+var nfc=box(hinge,mat.cyan,0.1,0.1,0.04,dpW-0.1,1.45,0.06);
+// INTERIOR fitout (local) - bed, shower, toilet, sink, smart wall
+box(pod,mat.wall_in,1.0,0.34,1.9,hw-0.55,0.23,-hl+1.05);
+box(pod,mat.bed,0.92,0.16,1.82,hw-0.55,0.48,-hl+1.05);
+box(pod,mat.wet,0.86,0.13,0.34,hw-0.55,0.63,-hl+0.4);
+box(pod,mat.wet,0.82,0.06,0.82,-hw+0.45,0.12,hl-0.5);
+box(pod,mat.glass,0.04,1.95,0.82,-hw+0.86,1.05,hl-0.5);
+box(pod,mat.glass,0.82,1.95,0.04,-hw+0.45,1.05,hl-0.91);
+box(pod,mat.tube,0.06,0.06,0.28,-hw+0.2,1.92,hl-0.5);
+cyl(pod,mat.tube,0.09,0.05,-hw+0.2,1.78,hl-0.64);
+box(pod,mat.cyan,0.05,0.16,0.05,-hw+0.1,1.1,hl-0.5);
+cyl(pod,mat.wet,0.19,0.4,-hw+0.34,0.26,0.2);
+box(pod,mat.wet,0.42,0.52,0.18,-hw+0.24,0.5,0.02);
+box(pod,mat.wall_in,0.36,0.05,0.4,-hw+0.36,0.46,0.2);
+box(pod,mat.wall_in,0.52,0.09,0.44,-hw+0.28,0.86,0.85);
+cyl(pod,mat.wet,0.16,0.12,-hw+0.28,0.96,0.85);
+box(pod,mat.tube,0.03,0.2,0.03,-hw+0.28,1.06,0.72);
+box(pod,mat.amber,0.02,0.46,0.34,-hw+t+0.03,1.5,0.85);
+box(pod,mat.wall_in,0.04,1.5,1.2,hw-t-0.03,1.3,hl-1.05);
+box(pod,mat.door,0.05,0.1,0.7,hw-t-0.06,1.9,hl-1.05);
+box(pod,mat.cyan,0.05,0.13,0.13,hw-t-0.06,1.2,hl-0.65);
+box(pod,mat.cyan,0.05,0.04,0.22,hw-t-0.06,0.95,hl-1.35);
+box(pod,mat.amber,0.6,0.04,0.6,0.1,H-0.14,-0.2);
+
+var gp=new T.Mesh(new T.PlaneGeometry(120,120),M(0x6f6a63,0,0.96));gp.rotation.x=-Math.PI/2;gp.position.y=-0.46;gp.receiveShadow=true;scene.add(gp);
+
+// ---- door open/close ----
+var doorOpen=false,doorT=0;
+function toggleDoor(){doorOpen=!doorOpen;}
+// ---- collision colliders (world XZ AABBs) ----
+var P=pod.position, c2=[];
+function addC(cx,cz,hwx,hwz){c2.push({x0:cx-hwx,x1:cx+hwx,z0:cz-hwz,z1:cz+hwz});}
+addC(P.x,P.z-hl,W/2,t/2);                 // back
+addC(P.x-hw,P.z,t/2,L/2);                 // left
+addC(P.x+hw,P.z,t/2,L/2);                 // right
+addC(P.x-hw+jamb/2,P.z+hl,jamb/2,t/2);    // front-left
+addC(P.x+hw-jamb/2,P.z+hl,jamb/2,t/2);    // front-right
+addC(P.x-hw+0.5,P.z+hl-0.7,0.42,0.42);    // wet block
+addC(P.x+hw-0.55,P.z-hl+1.0,0.5,0.95);    // bed
+var PR=0.3;
+function collide(nx,nz){
+ for(var i=0;i<c2.length;i++){var b=c2[i];
+   if(nx>b.x0-PR&&nx<b.x1+PR&&nz>b.z0-PR&&nz<b.z1+PR){
+     var dl=Math.abs(nx-(b.x0-PR)),dr=Math.abs((b.x1+PR)-nx),db=Math.abs(nz-(b.z0-PR)),dt=Math.abs((b.z1+PR)-nz);
+     var m=Math.min(dl,dr,db,dt);
+     if(m==dl)nx=b.x0-PR;else if(m==dr)nx=b.x1+PR;else if(m==db)nz=b.z0-PR;else nz=b.z1+PR;
+   }}
+ return [nx,nz];
+}
+
+// ---- controls ----
+var keys={},locked=false,active=false,md=false,lx=0,ly=0;
+var ov=document.getElementById('ov'),dh=document.getElementById('dh');
+function enter(){ active=true; ov.style.display='none'; document.body.classList.add('lock'); if(canvas.requestPointerLock) try{canvas.requestPointerLock();}catch(e){} }
+ov.addEventListener('click',enter);
+canvas.addEventListener('mousedown',function(e){ if(!active){enter();return;} md=true; lx=e.clientX; ly=e.clientY; });
+window.addEventListener('mouseup',function(){ md=false; });
+canvas.addEventListener('click',function(){ if(active&&lookingAtDoor())toggleDoor(); });
+document.addEventListener('pointerlockchange',function(){locked=(document.pointerLockElement===canvas);});
+document.addEventListener('mousemove',function(e){ if(locked){ yaw-=e.movementX*0.0022; pitch-=e.movementY*0.0022; } else if(active&&md){ yaw-=(e.clientX-lx)*0.004; pitch-=(e.clientY-ly)*0.004; lx=e.clientX; ly=e.clientY; } pitch=Math.max(-1.2,Math.min(1.2,pitch)); });
+addEventListener('keydown',function(e){keys[e.code]=true;if(e.code==='KeyE')toggleDoor();});
+addEventListener('keyup',function(e){keys[e.code]=false;});
+var ray=new T.Raycaster();
+function lookingAtDoor(){ray.setFromCamera(new T.Vector2(0,0),camera);var h=ray.intersectObjects([door,handle,nfc],true);return h.length&&h[0].distance<3.0;}
+
+function size(){var w=canvas.clientWidth,h=canvas.clientHeight||1;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+addEventListener('resize',size);size();
+var clock=new T.Clock();
+function loop(){requestAnimationFrame(loop);var dt=Math.min(0.05,clock.getDelta());
+ // door anim
+ var target=doorOpen?-1.95:0; doorT+=(target-doorT)*Math.min(1,dt*6); hinge.rotation.y=doorT;
+ // movement
+ yawO.rotation.y=yaw; camera.rotation.x=pitch;
+ if(active){var sp=2.6*dt,fx=Math.sin(yaw),fz=Math.cos(yaw),mx=0,mz=0;
+  if(keys.KeyW||keys.ArrowUp){mx-=fx;mz-=fz;} if(keys.KeyS||keys.ArrowDown){mx+=fx;mz+=fz;}
+  if(keys.KeyA||keys.ArrowLeft){mx-=fz;mz+=fx;} if(keys.KeyD||keys.ArrowRight){mx+=fz;mz-=fx;}
+  var len=Math.hypot(mx,mz); if(len>0){mx/=len;mz/=len;var nx=yawO.position.x+mx*sp,nz=yawO.position.z+mz*sp;var r=collide(nx,nz);yawO.position.x=r[0];yawO.position.z=r[1];}
+ }
+ // door hint
+ dh.style.opacity=(locked&&lookingAtDoor())?'1':'0';
+ renderer.render(scene,camera);
+}
+loop();
+})();
+</script></body></html>

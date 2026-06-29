@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NanoSleep Twin Pod - Interactive 3D</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(120% 90% at 64% 18%,#0d1d30 0%,#060f1c 55%,#03070f 100%);font-family:'Courier New',monospace;touch-action:none;}
+#c{display:block;width:100%;height:100%;cursor:grab;}#c:active{cursor:grabbing;}
+.tag{position:fixed;top:12px;left:14px;font-size:9px;letter-spacing:.22em;color:rgba(34,184,214,.7);text-transform:uppercase;z-index:2;pointer-events:none;}
+.hint{position:fixed;bottom:12px;right:14px;font-size:9px;letter-spacing:.18em;color:rgba(240,242,245,.4);text-transform:uppercase;z-index:2;pointer-events:none;}
+.fallback{position:fixed;inset:0;display:none;align-items:center;justify-content:center;color:rgba(240,242,245,.5);font-size:12px;text-align:center;padding:24px;}
+.nowebgl #c{display:none;}.nowebgl .fallback{display:flex;}
+</style></head><body>
+<div class="tag">NanoSleep &middot; Twin Pod &middot; 8&times;12&times;9</div>
+<div class="hint">Drag to orbit &middot; Scroll to zoom</div>
+<canvas id="c" aria-label="Interactive 3D model of the NanoSleep Twin Pod"></canvas>
+<div class="fallback">3D view needs WebGL. The Twin Pod is a welded steel sleep pod, 96 SF, solar roof, off-grid.</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  if(!window.THREE){document.body.classList.add('nowebgl');return;}
+  var T=window.THREE,canvas=document.getElementById('c'),renderer;
+  try{renderer=new T.WebGLRenderer({canvas:canvas,alpha:true,antialias:true,powerPreference:'high-performance'});}
+  catch(e){document.body.classList.add('nowebgl');return;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+
+  var scene=new T.Scene();scene.fog=new T.Fog(0x060f1c,36,95);
+  // environment for real reflections (PMREM from a gradient)
+  (function(){
+    var cv=document.createElement('canvas');cv.width=16;cv.height=128;var x=cv.getContext('2d');
+    var grd=x.createLinearGradient(0,0,0,128);
+    grd.addColorStop(0.0,'#34495e');grd.addColorStop(0.45,'#1b2c3e');grd.addColorStop(0.55,'#0c141d');grd.addColorStop(1.0,'#05080d');
+    x.fillStyle=grd;x.fillRect(0,0,16,128);
+    var tex=new T.CanvasTexture(cv);tex.mapping=T.EquirectangularReflectionMapping;
+    var pm=new T.PMREMGenerator(renderer);scene.environment=pm.fromEquirectangular(tex).texture;tex.dispose();pm.dispose();
+  })();
+
+  var g=new T.Group();scene.add(g);
+  function M(c,m,r,o){var p={color:c,metalness:m,roughness:r};if(o){for(var k in o)p[k]=o[k];}return new T.MeshStandardMaterial(p);}
+  var mat={
+    clad:M(0x26323f,0.38,0.5,{envMapIntensity:0.8}),
+    trim:M(0xb9bcc0,0.35,0.5,{envMapIntensity:1.0}),
+    door:M(0x18222e,0.45,0.5),
+    solar:M(0x0a1422,0.7,0.18,{envMapIntensity:1.3}),
+    pier:M(0xa9adb2,0.25,0.6),
+    deck:M(0x14202c,0.3,0.7)
+  };
+  var glass=new T.MeshPhysicalMaterial({color:0x0e1620,metalness:0,roughness:0.06,transmission:0.85,transparent:true,opacity:0.9,ior:1.45,thickness:0.4,envMapIntensity:1.4});
+  var winGlow=new T.MeshStandardMaterial({color:0x3a2c12,emissive:0xffcb82,emissiveIntensity:2.2});
+  var cyan=new T.MeshStandardMaterial({color:0x0a2730,emissive:0x22B8D6,emissiveIntensity:1.5});
+  function box(p,material,w,h,d,x,y,z,ry){var m=new T.Mesh(new T.BoxGeometry(w,h,d),material);m.position.set(x||0,y||0,z||0);if(ry)m.rotation.y=ry;m.castShadow=true;m.receiveShadow=true;p.add(m);return m;}
+  function cyl(p,material,r,h,x,y,z){var m=new T.Mesh(new T.CylinderGeometry(r,r,h,24),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;p.add(m);return m;}
+
+  // Twin Pod: 8 W (x) x 12 L (z) x 9 H (y)
+  var W=8,L=12,H=9,pod=new T.Group();g.add(pod);
+  var hx=W/2,hz=L/2;
+  box(pod,mat.trim,W+0.5,0.7,L+0.5,0,0.35,0);             // base skirt
+  box(pod,mat.deck,W-0.4,0.2,L-0.4,0,0.78,0);             // deck
+  box(pod,mat.clad,W-0.3,H-0.9,L-0.3,0,(H-0.9)/2+0.85,0); // body
+  [-1.4,1.4].forEach(function(zz){box(pod,mat.door,0.02,H-1.4,0.06,hx-0.16,(H-0.9)/2+0.85,zz);}); // seam grooves
+  [[-hx,-hz],[hx,-hz],[-hx,hz],[hx,hz]].forEach(function(c){box(pod,mat.trim,0.34,H-0.4,0.34,c[0],(H-0.4)/2+0.85,c[1]);}); // corner trims
+  box(pod,mat.clad,W-0.3,0.22,L-0.3,0,H+0.0,0);           // roof slab (closes top)
+  box(pod,mat.trim,W+0.3,0.3,L+0.3,0,H+0.28,0);           // roof coping cap (flush, slim)
+  // open door (front -z face, left)
+  var door=box(pod,mat.door,2.5,5.4,0.16,0,3.6,0);door.geometry.translate(1.25,0,0);door.position.set(-hx+0.3,3.6,-hz+0.05);door.rotation.y=-1.15;
+  box(pod,cyan,0.10,1.2,0.08,-hx+2.55,4.0,-hz-0.02);      // handle
+  box(pod,winGlow,0.05,4.2,2.0,-hx+0.22,3.6,-hz+0.6);     // interior glow through doorway
+  // recessed glowing window on +x (road) face
+  box(pod,mat.door,0.10,4.6,1.7,hx-0.18,4.7,-1.4);        // pocket
+  box(pod,mat.trim,0.14,4.0,1.35,hx-0.05,4.7,-1.4);       // frame
+  box(pod,winGlow,0.05,3.5,1.05,hx-0.16,4.7,-1.4);        // warm glow
+  box(pod,glass,0.06,3.7,1.18,hx+0.02,4.7,-1.4);          // glass
+  // angled solar panel on struts
+  var solar=box(pod,mat.solar,W-1.6,0.12,L-3.4,0,H+0.95,0.4);solar.rotation.x=-0.26;
+  [-2.2,2.2].forEach(function(sx){box(pod,mat.trim,0.1,0.7,0.1,sx,H+0.6,2.1);box(pod,mat.trim,0.1,0.32,0.1,sx,H+0.45,-1.1);});
+  // cylindrical piers
+  [[-hx+0.7,-hz+0.7],[hx-0.7,-hz+0.7],[-hx+0.7,hz-0.7],[hx-0.7,hz-0.7],[0,-hz+0.7],[0,hz-0.7]].forEach(function(c){cyl(pod,mat.pier,0.42,1.6,c[0],-0.8,c[1]);});
+
+  // concrete pad + shadow
+  var pad=new T.Mesh(new T.CircleGeometry(13,48),new T.MeshStandardMaterial({color:0x6c6960,roughness:0.95,metalness:0}));
+  pad.rotation.x=-Math.PI/2;pad.position.y=-1.62;pad.receiveShadow=true;scene.add(pad);
+  pod.position.y=1.0;
+
+  // lights
+  scene.add(new T.HemisphereLight(0x9fb4c8,0x0a0f16,0.55));
+  var key=new T.DirectionalLight(0xfff0db,2.1);key.position.set(14,20,11);key.castShadow=true;
+  key.shadow.mapSize.set(2048,2048);var sc=key.shadow.camera;sc.near=1;sc.far=95;sc.left=-18;sc.right=18;sc.top=18;sc.bottom=-18;sc.updateProjectionMatrix();scene.add(key);
+  var rim=new T.DirectionalLight(0x22B8D6,0.7);rim.position.set(-16,8,-13);scene.add(rim);
+  var warm=new T.PointLight(0xffc98a,7,28,2);warm.position.set(-1.5,5,1);scene.add(warm);
+
+  // camera + orbit
+  var camera=new T.PerspectiveCamera(40,1,0.1,300);
+  var target=new T.Vector3(0,4.6,0),R=33,theta=0.8,phi=1.29,idle=0,dragging=false,lx=0,ly=0,vth=0,vph=0;
+  function place(){camera.position.set(target.x+R*Math.sin(phi)*Math.cos(theta),target.y+R*Math.cos(phi),target.z+R*Math.sin(phi)*Math.sin(theta));camera.lookAt(target);}
+  function size(){var w=canvas.clientWidth,h=canvas.clientHeight||1;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+  canvas.addEventListener('pointerdown',function(e){e.preventDefault();dragging=true;lx=e.clientX;ly=e.clientY;idle=0;canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener('pointermove',function(e){if(!dragging)return;e.preventDefault();var dx=e.clientX-lx,dy=e.clientY-ly;vth=-dx*0.006;vph=-dy*0.006;theta+=vth;phi=Math.max(0.5,Math.min(1.4,phi+vph));lx=e.clientX;ly=e.clientY;idle=0;});
+  function up(){dragging=false;}canvas.addEventListener('pointerup',up);canvas.addEventListener('pointerleave',up);
+  canvas.addEventListener('wheel',function(e){e.preventDefault();R=Math.max(18,Math.min(46,R+e.deltaY*0.02));},{passive:false});
+  var tPrev=null;
+  function loop(ts){if(tPrev==null)tPrev=ts;var dt=Math.min(0.05,(ts-tPrev)/1000);tPrev=ts;if(!dragging){theta+=vth;phi=Math.max(0.5,Math.min(1.4,phi+vph));vth*=0.94;vph*=0.94;idle+=dt;if(Math.abs(vth)<0.0006&&idle>0.8)theta+=dt*0.14;}place();renderer.render(scene,camera);requestAnimationFrame(loop);}
+  canvas.addEventListener('webglcontextlost',function(e){e.preventDefault();document.body.classList.add('nowebgl');},false);
+  size();place();window.addEventListener('resize',size);requestAnimationFrame(loop);
+})();
+</script></body></html>
