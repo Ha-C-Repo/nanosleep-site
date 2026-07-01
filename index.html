@@ -145,8 +145,8 @@ section{min-height:100vh;padding:120px 0;position:relative;}
 .lockwrap{position:relative;}
 .lock-ov{display:none;} .lock-done{display:none;}
 @media (hover:none) and (pointer:coarse){
-  .lockwrap .frame{pointer-events:none;}
-  .lockwrap.active .frame{pointer-events:auto;}
+  .lockwrap iframe{pointer-events:none;}
+  .lockwrap.active iframe{pointer-events:auto;}
   .lock-ov{display:flex;position:absolute;inset:0;align-items:flex-end;justify-content:center;background:transparent;border:0;cursor:pointer;padding-bottom:22px;z-index:3;}
   .lockwrap.active .lock-ov{display:none;}
   .lock-hint{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);background:rgba(5,13,26,.72);padding:9px 18px;border:1px solid var(--border);border-radius:2px;}
@@ -254,7 +254,7 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   <div class="wrap">
     <p class="eyebrow reveal">NS-VIZ-FILM-001 · Step Inside</p>
     <h2 class="headline reveal">SEE IT<br><span class="cy">IN MOTION.</span></h2>
-    <iframe class="filmvid reveal" src="NanoSleep_Pod_Render.html?v=4" title="NanoSleep Twin Pod interactive 3D model" loading="lazy" style="width:100%;aspect-ratio:16/9;border:0;border-radius:4px;display:block;"></iframe>
+    <div class="lockwrap reveal" id="podLock"><iframe class="filmvid" src="NanoSleep_Pod_Render.html?v=4" title="NanoSleep Twin Pod interactive 3D model" loading="lazy" style="width:100%;aspect-ratio:16/9;border:0;border-radius:4px;display:block;"></iframe><button class="lock-ov" id="podOv" aria-label="Activate 3D pod view"><span class="lock-hint">Tap to interact</span></button><button class="lock-done" id="podDone" type="button">Done</button></div>
     <p class="frame-hint reveal">Drag to orbit &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Live interactive 3D model of the Twin Pod</p>
   </div>
 </section>
@@ -336,7 +336,7 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
     <p class="eyebrow reveal">NS-VIZ-SITE-001 · Phase 1 · I-10 Corridor</p>
     <h2 class="headline reveal">10 PODS.<br><span class="cy">ONE SITE.</span></h2>
     <p class="subtext reveal">The Phase 1 cluster. 10 Twin Pods, 140 feet of highway frontage, fully autonomous operations. No staff. No municipal utilities. Off-grid solar power.</p>
-    <iframe class="frame reveal" src="NanoSleep_Site_Cluster_Render.html" title="NanoSleep Phase 1 site cluster 3D render" loading="lazy"></iframe>
+    <div class="lockwrap reveal" id="siteLock"><iframe class="frame" src="NanoSleep_Site_Cluster_Render.html" title="NanoSleep Phase 1 site cluster 3D render" loading="lazy"></iframe><button class="lock-ov" id="siteOv" aria-label="Activate 3D cluster view"><span class="lock-hint">Tap to interact</span></button><button class="lock-done" id="siteDone" type="button">Done</button></div>
     <div class="callouts four">
       <div class="callout"><div class="lab">Phase 1 Cluster</div><div class="val">10 Twin Pods</div></div>
       <div class="callout"><div class="lab">Highway Frontage</div><div class="val">140 Feet</div></div>
@@ -484,11 +484,11 @@ footer .r{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.15);}
   var prog=document.getElementById('prog');
   window.addEventListener('scroll',function(){ var h=document.documentElement; var sc=h.scrollTop/((h.scrollHeight-h.clientHeight)||1); prog.style.width=(sc*100)+'%'; },{passive:true});
   setTimeout(function(){ var n=document.querySelectorAll('.reveal:not(.in)'); for(var i=0;i<n.length;i++) n[i].classList.add('in'); },1400);
-  (function(){ var lw=document.getElementById('intLock'); if(!lw) return;
-    var ov=document.getElementById('intOv'), dn=document.getElementById('intDone'), sy=0;
-    function lock(){ sy=window.scrollY||window.pageYOffset; lw.classList.add('active'); var b=document.body; b.style.position='fixed'; b.style.top=(-sy)+'px'; b.style.left='0'; b.style.right='0'; b.style.width='100%'; }
-    function unlock(){ lw.classList.remove('active'); var b=document.body; b.style.position=''; b.style.top=''; b.style.left=''; b.style.right=''; b.style.width=''; window.scrollTo(0,sy); }
-    if(ov) ov.addEventListener('click',lock); if(dn) dn.addEventListener('click',unlock);
+  (function(){ var sy=0, cur=null;
+    function unlock(){ if(!cur) return; cur.classList.remove('active'); cur=null; var b=document.body; b.style.position=''; b.style.top=''; b.style.left=''; b.style.right=''; b.style.width=''; window.scrollTo(0,sy); }
+    function lock(lw){ if(cur) unlock(); sy=window.scrollY||window.pageYOffset; lw.classList.add('active'); cur=lw; var b=document.body; b.style.position='fixed'; b.style.top=(-sy)+'px'; b.style.left='0'; b.style.right='0'; b.style.width='100%'; }
+    var wraps=document.querySelectorAll('.lockwrap');
+    for(var i=0;i<wraps.length;i++){ (function(lw){ var ov=lw.querySelector('.lock-ov'), dn=lw.querySelector('.lock-done'); if(ov) ov.addEventListener('click',function(e){ e.preventDefault(); lock(lw); }); if(dn) dn.addEventListener('click',function(e){ e.preventDefault(); unlock(); }); })(wraps[i]); }
   })();
 })();
 </script>
